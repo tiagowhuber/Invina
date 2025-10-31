@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { eventsApi } from '@/services/api/events'
-import type { Event, EventWithAvailability } from '@/types'
+import type { EventWithAvailability } from '@/types'
 
 export const useEventsStore = defineStore('events', () => {
   const events = ref<EventWithAvailability[]>([])
