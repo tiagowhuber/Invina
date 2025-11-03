@@ -16,8 +16,13 @@ export const usePaymentStore = defineStore('payment', () => {
     paymentUrl.value = null
     paymentToken.value = null
     
+    console.log('PaymentStore - initiatePayment called with orderId:', orderId, 'type:', typeof orderId)
+    
     try {
-      const response = await webpayApi.initiate({ order_id: orderId })
+      const requestData = { order_id: orderId }
+      console.log('PaymentStore - sending request:', requestData)
+      const response = await webpayApi.initiate(requestData)
+      console.log('PaymentStore - response:', response.data)
       if (response.data.success && response.data.data) {
         const data: InitiatePaymentResponse = response.data.data
         paymentUrl.value = data.url
@@ -25,6 +30,7 @@ export const usePaymentStore = defineStore('payment', () => {
         return data
       }
     } catch (err: any) {
+      console.error('PaymentStore - error:', err)
       error.value = err.response?.data?.message || 'Failed to initiate payment'
       throw err
     } finally {

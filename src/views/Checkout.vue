@@ -59,11 +59,17 @@ const submitOrder = async () => {
       tickets,
     }
 
+    console.log('Checkout - Creating order with data:', orderData)
     const order = await ordersStore.createOrder(orderData)
+    console.log('Checkout - Order created:', order)
     
-    if (order) {
+    if (order && order.id) {
+      console.log('Checkout - Redirecting to payment with orderId:', order.id)
       cartStore.clearCart()
       router.push(`/payment?orderId=${order.id}`)
+    } else {
+      console.error('Checkout - Order created but no ID returned:', order)
+      ordersStore.error = 'Order was created but ID is missing'
     }
   } catch (error: any) {
     console.error('Failed to create order:', error)

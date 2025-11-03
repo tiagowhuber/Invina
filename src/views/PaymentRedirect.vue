@@ -17,16 +17,31 @@ const isRedirecting = ref(false)
 onMounted(async () => {
   const orderId = route.query.orderId
 
+  console.log('PaymentRedirect - orderId from query:', orderId, 'type:', typeof orderId)
+
   if (!orderId) {
+    console.error('No orderId provided, redirecting to home')
     router.push('/')
+    return
+  }
+
+  const orderIdNumber = Number(orderId)
+  console.log('PaymentRedirect - converted to number:', orderIdNumber, 'isNaN:', isNaN(orderIdNumber))
+
+  if (isNaN(orderIdNumber) || orderIdNumber <= 0) {
+    console.error('Invalid orderId:', orderId)
+    paymentStore.error = 'Invalid order ID'
+    isRedirecting.value = false
     return
   }
 
   try {
     isRedirecting.value = true
-    const data = await paymentStore.initiatePayment(Number(orderId))
+    console.log('PaymentRedirect - initiating payment for order:', orderIdNumber)
+    const data = await paymentStore.initiatePayment(orderIdNumber)
     
     if (data && data.url) {
+      console.log('PaymentRedirect - got payment URL, redirecting...')
       // Redirect to WebPay
       setTimeout(() => {
         window.location.href = data.url

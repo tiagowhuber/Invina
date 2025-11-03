@@ -31,6 +31,11 @@ const router = createRouter({
           component: () => import('@/views/PaymentRedirect.vue'),
         },
         {
+          path: '/payment/return',
+          name: 'payment-return',
+          component: () => import('@/views/PaymentReturn.vue'),
+        },
+        {
           path: '/orders/:orderNumber',
           name: 'order-confirmation',
           component: () => import('@/views/OrderConfirmation.vue'),
