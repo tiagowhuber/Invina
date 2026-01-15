@@ -81,12 +81,12 @@ const submitOrder = async () => {
 
 <template>
   <div class="w-full max-w-6xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-bold mb-6">Checkout</h1>
+    <h1 class="text-3xl md:text-4xl font-bold mb-6">Pago</h1>
 
     <div v-if="cartStore.items.length === 0" class="text-center py-12">
-      <p class="text-muted-foreground text-lg mb-4">Your cart is empty</p>
+      <p class="text-muted-foreground text-lg mb-4">Tu carrito está vacío</p>
       <Button @click="router.push('/')">
-        Browse Events
+        Explorar Eventos
       </Button>
     </div>
 
@@ -94,31 +94,31 @@ const submitOrder = async () => {
       <div class="lg:col-span-2 space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Contact Information</CardTitle>
+            <CardTitle>Información de Contacto</CardTitle>
           </CardHeader>
           <CardContent>
             <div class="space-y-4">
               <div>
-                <Label for="name">Full Name *</Label>
+                <Label for="name">Nombre Completo *</Label>
                 <Input 
                   id="name"
                   v-model="customerName"
-                  placeholder="John Doe"
+                  placeholder="Juan Pérez"
                   class="mt-1"
                 />
               </div>
               <div>
-                <Label for="email">Email *</Label>
+                <Label for="email">Correo Electrónico *</Label>
                 <Input 
                   id="email"
                   v-model="customerEmail"
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder="juan@ejemplo.com"
                   class="mt-1"
                 />
               </div>
               <div>
-                <Label for="phone">Phone (optional)</Label>
+                <Label for="phone">Teléfono (opcional)</Label>
                 <Input 
                   id="phone"
                   v-model="customerPhone"
@@ -135,22 +135,22 @@ const submitOrder = async () => {
           <CardHeader>
             <CardTitle class="text-xl">{{ item.event.name }}</CardTitle>
             <p class="text-sm text-muted-foreground">
-              {{ item.quantity }} ticket(s) × {{ formatPrice(item.event.price) }}
+              {{ item.quantity }} entrada(s) × {{ formatPrice(item.event.price) }}
             </p>
           </CardHeader>
           <CardContent>
             <div class="space-y-3">
-              <p class="text-sm font-semibold">Attendee Names (optional)</p>
+              <p class="text-sm font-semibold">Nombres de Asistentes (opcional)</p>
               <div 
                 v-for="(name, index) in item.attendeeNames" 
                 :key="index"
                 class="flex gap-2 items-center"
               >
-                <span class="text-sm text-muted-foreground w-20">Ticket {{ index + 1 }}</span>
+                <span class="text-sm text-muted-foreground w-20">Entrada {{ index + 1 }}</span>
                 <Input 
                   :value="name"
                   @update:modelValue="(value) => updateAttendeeName(item.event.id, index, value as string)"
-                  placeholder="Attendee name"
+                  placeholder="Nombre del asistente"
                 />
               </div>
             </div>
@@ -161,7 +161,7 @@ const submitOrder = async () => {
       <div class="lg:col-span-1">
         <Card class="sticky top-4">
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle>Resumen del Pedido</CardTitle>
           </CardHeader>
           <CardContent>
             <div class="space-y-4">
@@ -174,7 +174,7 @@ const submitOrder = async () => {
 
               <div class="border-t pt-4">
                 <div class="flex justify-between mb-4">
-                  <span class="font-semibold">Total Tickets:</span>
+                  <span class="font-semibold">Total de Entradas:</span>
                   <span class="font-semibold">{{ cartStore.totalItems }}</span>
                 </div>
                 <div class="flex justify-between mb-4">
@@ -194,11 +194,11 @@ const submitOrder = async () => {
                   class="w-full"
                   size="lg"
                 >
-                  {{ isSubmitting ? 'Processing...' : 'Proceed to Payment' }}
+                  {{ isSubmitting ? 'Procesando...' : 'Proceder al Pago' }}
                 </Button>
 
                 <p class="text-xs text-muted-foreground text-center mt-4">
-                  You will be redirected to WebPay to complete your payment
+                  Serás redirigido a WebPay para completar tu pago
                 </p>
               </div>
             </div>

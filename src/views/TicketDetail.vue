@@ -37,7 +37,7 @@ onMounted(async () => {
 })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -71,7 +71,7 @@ const viewOrder = () => {
       @click="router.push('/orders/lookup')"
       class="mb-4"
     >
-      ← Back
+      ← Volver
     </Button>
 
     <div v-if="loading" class="animate-pulse space-y-4">
@@ -82,7 +82,7 @@ const viewOrder = () => {
     <div v-else-if="error" class="text-center py-12">
       <p class="text-destructive mb-4">{{ error }}</p>
       <Button @click="router.push('/orders/lookup')">
-        Go to Order Lookup
+        Ir a Búsqueda de Pedidos
       </Button>
     </div>
 
@@ -99,31 +99,31 @@ const viewOrder = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Ticket Details</CardTitle>
+          <CardTitle>Detalles de la Entrada</CardTitle>
         </CardHeader>
         <CardContent>
           <dl class="space-y-3 text-sm">
             <div>
-              <dt class="text-muted-foreground">Event</dt>
+              <dt class="text-muted-foreground">Evento</dt>
               <dd class="font-medium text-lg">{{ ticket.event_name }}</dd>
             </div>
             <div>
-              <dt class="text-muted-foreground">Date & Time</dt>
+              <dt class="text-muted-foreground">Fecha y Hora</dt>
               <dd class="font-medium">{{ formatDate(ticket.event_date) }}</dd>
             </div>
             <div>
-              <dt class="text-muted-foreground">Location</dt>
+              <dt class="text-muted-foreground">Ubicación</dt>
               <dd class="font-medium">{{ ticket.location }}</dd>
               <dd v-if="ticket.address" class="text-xs text-muted-foreground mt-1">
                 {{ ticket.address }}
               </dd>
             </div>
             <div v-if="ticket.attendee_name">
-              <dt class="text-muted-foreground">Attendee</dt>
+              <dt class="text-muted-foreground">Asistente</dt>
               <dd class="font-medium">{{ ticket.attendee_name }}</dd>
             </div>
             <div>
-              <dt class="text-muted-foreground">Customer</dt>
+              <dt class="text-muted-foreground">Cliente</dt>
               <dd class="font-medium">{{ ticket.customer_name }}</dd>
               <dd class="text-xs text-muted-foreground">{{ ticket.customer_email }}</dd>
             </div>
@@ -133,7 +133,7 @@ const viewOrder = () => {
 
       <Card v-if="ticket.status === 'confirmed'">
         <CardHeader>
-          <CardTitle class="text-center">Entry QR Code</CardTitle>
+          <CardTitle class="text-center">Código QR de Entrada</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="flex justify-center py-4">
@@ -144,14 +144,14 @@ const viewOrder = () => {
             />
           </div>
           <p class="text-center text-sm text-muted-foreground mt-4">
-            Show this QR code at the venue entrance
+            Muestra este código QR en la entrada del lugar
           </p>
         </CardContent>
       </Card>
 
       <div class="flex gap-4">
         <Button @click="viewOrder" variant="outline" class="flex-1">
-          View Full Order
+          Ver Pedido Completo
         </Button>
       </div>
     </div>

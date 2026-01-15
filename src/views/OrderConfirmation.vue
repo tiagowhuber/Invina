@@ -27,7 +27,7 @@ onMounted(async () => {
 })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -105,7 +105,7 @@ const formatTimeRemaining = computed(() => {
       @click="router.push('/orders/lookup')"
       class="mb-4"
     >
-      ← Back to Order Lookup
+      ← Volver a Búsqueda de Pedidos
     </Button>
 
     <div v-if="ordersStore.loading" class="animate-pulse space-y-4">
@@ -116,14 +116,14 @@ const formatTimeRemaining = computed(() => {
     <div v-else-if="ordersStore.error" class="text-center py-12">
       <p class="text-destructive mb-4">{{ ordersStore.error }}</p>
       <Button @click="router.push('/orders/lookup')">
-        Go to Order Lookup
+        Ir a Búsqueda de Pedidos
       </Button>
     </div>
 
     <div v-else-if="ordersStore.currentOrder" class="space-y-6">
       <div class="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 class="text-3xl font-bold mb-2">Order {{ ordersStore.currentOrder.order_number }}</h1>
+          <h1 class="text-3xl font-bold mb-2">Pedido {{ ordersStore.currentOrder.order_number }}</h1>
           <Badge :variant="getStatusVariant(ordersStore.currentOrder.status)">
             {{ ordersStore.currentOrder.status.toUpperCase() }}
           </Badge>
@@ -131,7 +131,7 @@ const formatTimeRemaining = computed(() => {
 
         <div v-if="ordersStore.currentOrder.status === 'pending' && timeRemaining !== null" 
              class="text-right">
-          <p class="text-sm text-muted-foreground">Order expires in</p>
+          <p class="text-sm text-muted-foreground">El pedido expira en</p>
           <p class="text-2xl font-bold text-destructive">{{ formatTimeRemaining }}</p>
         </div>
       </div>
@@ -139,12 +139,12 @@ const formatTimeRemaining = computed(() => {
       <Card v-if="ordersStore.currentOrder.status === 'pending'">
         <CardContent class="pt-6">
           <div class="bg-secondary/50 p-4 rounded-lg text-center">
-            <p class="font-semibold mb-2">⏱️ Payment Pending</p>
+            <p class="font-semibold mb-2">⏱️ Pago Pendiente</p>
             <p class="text-sm text-muted-foreground mb-4">
-              Please complete your payment within {{ formatTimeRemaining }} to secure your tickets.
+              Por favor completa tu pago dentro de {{ formatTimeRemaining }} para asegurar tus entradas.
             </p>
             <Button size="lg" @click="router.push(`/payment?orderId=${ordersStore.currentOrder.id}`)">
-              Continue to Payment
+              Continuar al Pago
             </Button>
           </div>
         </CardContent>
@@ -154,9 +154,9 @@ const formatTimeRemaining = computed(() => {
         <CardContent class="pt-6">
           <div class="bg-primary/10 p-4 rounded-lg text-center">
             <p class="text-2xl mb-2">✅</p>
-            <p class="font-semibold text-lg">Payment Successful!</p>
+            <p class="font-semibold text-lg">¡Pago Exitoso!</p>
             <p class="text-sm text-muted-foreground">
-              Your tickets have been confirmed. Check your email for details.
+              Tus entradas han sido confirmadas. Revisa tu correo electrónico para más detalles.
             </p>
           </div>
         </CardContent>
@@ -165,24 +165,24 @@ const formatTimeRemaining = computed(() => {
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Customer Information</CardTitle>
+            <CardTitle>Información del Cliente</CardTitle>
           </CardHeader>
           <CardContent>
             <dl class="space-y-2 text-sm">
               <div>
-                <dt class="text-muted-foreground">Name</dt>
+                <dt class="text-muted-foreground">Nombre</dt>
                 <dd class="font-medium">{{ ordersStore.currentOrder.customer_name }}</dd>
               </div>
               <div>
-                <dt class="text-muted-foreground">Email</dt>
+                <dt class="text-muted-foreground">Correo Electrónico</dt>
                 <dd class="font-medium">{{ ordersStore.currentOrder.customer_email }}</dd>
               </div>
               <div v-if="ordersStore.currentOrder.customer_phone">
-                <dt class="text-muted-foreground">Phone</dt>
+                <dt class="text-muted-foreground">Teléfono</dt>
                 <dd class="font-medium">{{ ordersStore.currentOrder.customer_phone }}</dd>
               </div>
               <div>
-                <dt class="text-muted-foreground">Order Date</dt>
+                <dt class="text-muted-foreground">Fecha del Pedido</dt>
                 <dd class="font-medium">{{ formatDate(ordersStore.currentOrder.created_at) }}</dd>
               </div>
             </dl>
@@ -191,16 +191,16 @@ const formatTimeRemaining = computed(() => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Payment Summary</CardTitle>
+            <CardTitle>Resumen del Pago</CardTitle>
           </CardHeader>
           <CardContent>
             <div class="space-y-4">
               <div class="flex justify-between">
-                <span class="text-muted-foreground">Total Tickets</span>
+                <span class="text-muted-foreground">Total de Entradas</span>
                 <span class="font-medium">{{ ordersStore.currentOrder.tickets.length }}</span>
               </div>
               <div class="flex justify-between text-xl font-bold border-t pt-4">
-                <span>Total Amount</span>
+                <span>Monto Total</span>
                 <span class="text-primary">{{ formatPrice(ordersStore.currentOrder.total_amount) }}</span>
               </div>
             </div>
@@ -210,7 +210,7 @@ const formatTimeRemaining = computed(() => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Tickets ({{ ordersStore.currentOrder.tickets.length }})</CardTitle>
+          <CardTitle>Entradas ({{ ordersStore.currentOrder.tickets.length }})</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="space-y-4">
@@ -224,7 +224,7 @@ const formatTimeRemaining = computed(() => {
                   <h4 class="font-semibold">{{ ticket.event_name }}</h4>
                   <p class="text-sm text-muted-foreground">{{ ticket.ticket_number }}</p>
                   <p v-if="ticket.attendee_name" class="text-sm">
-                    Attendee: {{ ticket.attendee_name }}
+                    Asistente: {{ ticket.attendee_name }}
                   </p>
                 </div>
                 <Badge :variant="getTicketStatusVariant(ticket.status)">

@@ -25,7 +25,7 @@ onMounted(() => {
 })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -63,7 +63,7 @@ const canAddToCart = () => {
       @click="router.push('/')"
       class="mb-4"
     >
-      ← Back to Events
+      ← Volver a Eventos
     </Button>
 
     <div v-if="eventsStore.loading" class="animate-pulse">
@@ -84,17 +84,17 @@ const canAddToCart = () => {
         <div class="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Event Details</CardTitle>
+              <CardTitle>Detalles del Evento</CardTitle>
             </CardHeader>
             <CardContent>
               <div class="space-y-4">
                 <div v-if="eventsStore.currentEvent.description">
-                  <h3 class="font-semibold mb-2">Description</h3>
+                  <h3 class="font-semibold mb-2">Descripción</h3>
                   <p class="text-muted-foreground">{{ eventsStore.currentEvent.description }}</p>
                 </div>
 
                 <div>
-                  <h3 class="font-semibold mb-2">Date & Time</h3>
+                  <h3 class="font-semibold mb-2">Fecha y Hora</h3>
                   <div class="flex items-center gap-2 text-muted-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -104,7 +104,7 @@ const canAddToCart = () => {
                 </div>
 
                 <div>
-                  <h3 class="font-semibold mb-2">Location</h3>
+                  <h3 class="font-semibold mb-2">Ubicación</h3>
                   <div class="flex items-start gap-2 text-muted-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -120,13 +120,13 @@ const canAddToCart = () => {
                 </div>
 
                 <div>
-                  <h3 class="font-semibold mb-2">Availability</h3>
+                  <h3 class="font-semibold mb-2">Disponibilidad</h3>
                   <div class="flex gap-2">
                     <Badge variant="secondary">
-                      {{ eventsStore.currentEvent.tickets_available }} of {{ eventsStore.currentEvent.capacity }} available
+                      {{ eventsStore.currentEvent.tickets_available }} de {{ eventsStore.currentEvent.capacity }} disponibles
                     </Badge>
                     <Badge v-if="eventsStore.currentEvent.tickets_available < 10" variant="destructive">
-                      Almost sold out!
+                      ¡Casi agotado!
                     </Badge>
                   </div>
                 </div>
@@ -141,22 +141,22 @@ const canAddToCart = () => {
               <CardTitle class="text-3xl text-primary">
                 {{ formatPrice(eventsStore.currentEvent.price) }}
               </CardTitle>
-              <p class="text-sm text-muted-foreground">per ticket</p>
+              <p class="text-sm text-muted-foreground">por entrada</p>
             </CardHeader>
             <CardContent>
               <div class="space-y-4">
                 <div>
-                  <Label for="quantity">Number of Tickets</Label>
+                  <Label for="quantity">Cantidad de Entradas</Label>
                   <Input 
                     id="quantity"
-                    v-model="quantity"
+                    v-model.number="quantity"
                     type="number"
                     min="1"
                     :max="eventsStore.currentEvent.tickets_available"
                     class="mt-1"
                   />
                   <p class="text-sm text-muted-foreground mt-1">
-                    Max: {{ eventsStore.currentEvent.tickets_available }}
+                    Máximo: {{ eventsStore.currentEvent.tickets_available }}
                   </p>
                 </div>
 
@@ -174,7 +174,7 @@ const canAddToCart = () => {
                     class="w-full"
                     size="lg"
                   >
-                    {{ canAddToCart() ? 'Continue to Checkout' : 'Unavailable' }}
+                    {{ canAddToCart() ? 'Continuar al Pago' : 'No Disponible' }}
                   </Button>
                 </div>
               </div>

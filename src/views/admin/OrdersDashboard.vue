@@ -17,7 +17,7 @@ onMounted(() => {
 })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -60,33 +60,33 @@ const ordersByStatus = (status: string) => {
 
 <template>
   <div class="w-full">
-    <h1 class="text-3xl font-bold mb-6">Orders Dashboard</h1>
+    <h1 class="text-3xl font-bold mb-6">Panel de Pedidos</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <Card>
         <CardContent class="pt-6">
-          <p class="text-sm text-muted-foreground">Total Orders</p>
+          <p class="text-sm text-muted-foreground">Total de Pedidos</p>
           <p class="text-3xl font-bold">{{ ordersStore.orders.length }}</p>
         </CardContent>
       </Card>
 
       <Card>
         <CardContent class="pt-6">
-          <p class="text-sm text-muted-foreground">Paid</p>
+          <p class="text-sm text-muted-foreground">Pagados</p>
           <p class="text-3xl font-bold text-green-600">{{ ordersByStatus('paid') }}</p>
         </CardContent>
       </Card>
 
       <Card>
         <CardContent class="pt-6">
-          <p class="text-sm text-muted-foreground">Pending</p>
+          <p class="text-sm text-muted-foreground">Pendientes</p>
           <p class="text-3xl font-bold text-yellow-600">{{ ordersByStatus('pending') }}</p>
         </CardContent>
       </Card>
 
       <Card>
         <CardContent class="pt-6">
-          <p class="text-sm text-muted-foreground">Revenue</p>
+          <p class="text-sm text-muted-foreground">Ingresos</p>
           <p class="text-3xl font-bold text-primary">{{ formatPrice(totalRevenue()) }}</p>
         </CardContent>
       </Card>
@@ -95,9 +95,9 @@ const ordersByStatus = (status: string) => {
     <Card>
       <CardHeader>
         <div class="flex justify-between items-center">
-          <CardTitle>All Orders</CardTitle>
+          <CardTitle>Todos los Pedidos</CardTitle>
           <Button @click="ordersStore.fetchAllOrders()" variant="outline" size="sm">
-            Refresh
+            Actualizar
           </Button>
         </div>
       </CardHeader>
@@ -113,19 +113,19 @@ const ordersByStatus = (status: string) => {
         </div>
 
         <div v-else-if="ordersStore.orders.length === 0" class="text-center py-12 text-muted-foreground">
-          No orders found
+          No se encontraron pedidos
         </div>
 
         <div v-else class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead class="border-b">
               <tr class="text-left">
-                <th class="pb-3 font-semibold">Order Number</th>
-                <th class="pb-3 font-semibold">Customer</th>
-                <th class="pb-3 font-semibold">Date</th>
-                <th class="pb-3 font-semibold">Amount</th>
-                <th class="pb-3 font-semibold">Status</th>
-                <th class="pb-3 font-semibold">Actions</th>
+                <th class="pb-3 font-semibold">Número de Pedido</th>
+                <th class="pb-3 font-semibold">Cliente</th>
+                <th class="pb-3 font-semibold">Fecha</th>
+                <th class="pb-3 font-semibold">Monto</th>
+                <th class="pb-3 font-semibold">Estado</th>
+                <th class="pb-3 font-semibold">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -148,7 +148,7 @@ const ordersByStatus = (status: string) => {
                 </td>
                 <td class="py-3">
                   <Button @click="viewOrder(order.order_number)" variant="ghost" size="sm">
-                    View →
+                    Ver →
                   </Button>
                 </td>
               </tr>

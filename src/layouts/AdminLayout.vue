@@ -24,31 +24,31 @@ function handleLogout() {
               to="/admin" 
               class="hover:underline"
             >
-              Events
+              Eventos
             </router-link>
             <router-link 
               to="/admin/orders" 
               class="hover:underline"
             >
-              Orders
+              Pedidos
             </router-link>
             <router-link 
               to="/admin/validate" 
               class="hover:underline"
             >
-              Validate
+              Validar
             </router-link>
             <router-link 
               to="/admin/statistics" 
               class="hover:underline"
             >
-              Stats
+              Estadísticas
             </router-link>
             <button 
               @click="handleLogout"
               class="ml-4 px-3 py-1 bg-primary-foreground text-primary rounded hover:opacity-90 transition-opacity text-sm"
             >
-              Logout
+              Cerrar Sesión
             </button>
           </div>
         </nav>

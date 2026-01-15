@@ -32,20 +32,20 @@ const handleLogin = () => {
   <div class="min-h-screen flex items-center justify-center bg-background px-4">
     <Card class="w-full max-w-md">
       <CardHeader>
-        <CardTitle class="text-2xl text-center">Admin Login</CardTitle>
+        <CardTitle class="text-2xl text-center">Inicio de Sesión Admin</CardTitle>
         <p class="text-sm text-center text-muted-foreground mt-2">
-          Enter password to access admin panel
+          Ingresa la contraseña para acceder al panel de administración
         </p>
       </CardHeader>
       <CardContent>
         <form @submit.prevent="handleLogin" class="space-y-4">
           <div>
-            <Label for="password">Password</Label>
+            <Label for="password">Contraseña</Label>
             <Input 
               id="password"
               v-model="password"
               type="password"
-              placeholder="Enter admin password"
+              placeholder="Ingresa la contraseña de administrador"
               class="mt-1"
               autofocus
             />
@@ -60,7 +60,7 @@ const handleLogin = () => {
             :disabled="!password"
             class="w-full"
           >
-            Login
+            Iniciar Sesión
           </Button>
 
           <div class="text-center">
@@ -68,7 +68,7 @@ const handleLogin = () => {
               to="/" 
               class="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
-              ← Back to Events
+              ← Volver a Eventos
             </router-link>
           </div>
         </form>

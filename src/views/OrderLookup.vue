@@ -29,7 +29,7 @@ const formatPrice = (price: number) => {
 }
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -83,7 +83,7 @@ const viewOrder = (orderNumber: string) => {
 
 <template>
   <div class="w-full max-w-3xl mx-auto">
-    <h1 class="text-3xl md:text-4xl font-bold mb-6">Find Your Order</h1>
+    <h1 class="text-3xl md:text-4xl font-bold mb-6">Encuentra tu Pedido</h1>
 
     <Card class="mb-6">
       <CardContent class="pt-6">
@@ -97,7 +97,7 @@ const viewOrder = (orderNumber: string) => {
                 : 'text-muted-foreground hover:text-foreground'
             ]"
           >
-            Order Number
+            Número de Pedido
           </button>
           <button
             @click="searchType = 'email'; searchResults = []; ordersStore.error = null"
@@ -108,13 +108,13 @@ const viewOrder = (orderNumber: string) => {
                 : 'text-muted-foreground hover:text-foreground'
             ]"
           >
-            Email Address
+            Correo Electrónico
           </button>
         </div>
 
         <div v-if="searchType === 'orderNumber'" class="space-y-4">
           <div>
-            <Label for="orderNumber">Order Number</Label>
+            <Label for="orderNumber">Número de Pedido</Label>
             <Input 
               id="orderNumber"
               v-model="orderNumber"
@@ -128,7 +128,7 @@ const viewOrder = (orderNumber: string) => {
             :disabled="!orderNumber.trim() || isSearching"
             class="w-full"
           >
-            {{ isSearching ? 'Searching...' : 'Find Order' }}
+            {{ isSearching ? 'Buscando...' : 'Buscar Pedido' }}
           </Button>
           <div v-if="ordersStore.error" class="p-3 bg-destructive/10 text-destructive text-sm rounded">
             {{ ordersStore.error }}
@@ -137,12 +137,12 @@ const viewOrder = (orderNumber: string) => {
 
         <div v-else class="space-y-4">
           <div>
-            <Label for="email">Email Address</Label>
+            <Label for="email">Correo Electrónico</Label>
             <Input 
               id="email"
               v-model="email"
               type="email"
-              placeholder="john@example.com"
+              placeholder="juan@ejemplo.com"
               class="mt-1"
               @keyup.enter="searchByEmail"
             />
@@ -152,14 +152,14 @@ const viewOrder = (orderNumber: string) => {
             :disabled="!email.trim() || isSearching"
             class="w-full"
           >
-            {{ isSearching ? 'Searching...' : 'Search Orders' }}
+            {{ isSearching ? 'Buscando...' : 'Buscar Pedidos' }}
           </Button>
         </div>
       </CardContent>
     </Card>
 
     <div v-if="searchResults.length > 0" class="space-y-4">
-      <h2 class="text-xl font-semibold">Your Orders ({{ searchResults.length }})</h2>
+      <h2 class="text-xl font-semibold">Tus Pedidos ({{ searchResults.length }})</h2>
       
       <Card 
         v-for="order in searchResults" 
@@ -181,7 +181,7 @@ const viewOrder = (orderNumber: string) => {
           </div>
 
           <div class="space-y-2 text-sm">
-            <p><strong>{{ order.tickets.length }}</strong> ticket(s)</p>
+            <p><strong>{{ order.tickets.length }}</strong> entrada(s)</p>
             <div v-if="order.tickets.length > 0" class="text-muted-foreground">
               {{ order.tickets.map(t => t.event_name).join(', ') }}
             </div>
@@ -192,7 +192,7 @@ const viewOrder = (orderNumber: string) => {
               {{ formatPrice(order.total_amount) }}
             </span>
             <Button size="sm" variant="outline">
-              View Details →
+              Ver Detalles →
             </Button>
           </div>
         </CardContent>
@@ -200,7 +200,7 @@ const viewOrder = (orderNumber: string) => {
     </div>
 
     <div v-else-if="searchType === 'email' && !isSearching && email && !ordersStore.error" class="text-center py-12">
-      <p class="text-muted-foreground">No orders found for this email address.</p>
+      <p class="text-muted-foreground">No se encontraron pedidos para este correo electrónico.</p>
     </div>
   </div>
 </template>

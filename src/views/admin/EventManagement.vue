@@ -31,7 +31,7 @@ onMounted(() => {
 })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -115,9 +115,9 @@ const toggleActive = async (event: Event) => {
 <template>
   <div class="w-full">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">Event Management</h1>
+      <h1 class="text-3xl font-bold">Gestión de Eventos</h1>
       <Button @click="openCreateDialog">
-        + Create Event
+        + Crear Evento
       </Button>
     </div>
 
@@ -142,10 +142,10 @@ const toggleActive = async (event: Event) => {
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-2">
                 <h3 class="text-xl font-semibold">{{ event.name }}</h3>
-                <Badge v-if="!event.is_active" variant="outline">Inactive</Badge>
-                <Badge v-else-if="event.tickets_available === 0" variant="destructive">Sold Out</Badge>
+                <Badge v-if="!event.is_active" variant="outline">Inactivo</Badge>
+                <Badge v-else-if="event.tickets_available === 0" variant="destructive">Agotado</Badge>
                 <Badge v-else variant="secondary">
-                  {{ event.tickets_available }} available
+                  {{ event.tickets_available }} disponibles
                 </Badge>
               </div>
               <p v-if="event.description" class="text-sm text-muted-foreground mb-2">
@@ -154,8 +154,8 @@ const toggleActive = async (event: Event) => {
               <div class="text-sm text-muted-foreground space-y-1">
                 <p>📅 {{ formatDate(event.event_date) }}</p>
                 <p>📍 {{ event.location }}</p>
-                <p>💵 {{ formatPrice(event.price) }} | Capacity: {{ event.capacity }}</p>
-                <p>Sold: {{ event.tickets_sold }} / {{ event.capacity }}</p>
+                <p>💵 {{ formatPrice(event.price) }} | Capacidad: {{ event.capacity }}</p>
+                <p>Vendidas: {{ event.tickets_sold }} / {{ event.capacity }}</p>
               </div>
             </div>
 
@@ -165,13 +165,13 @@ const toggleActive = async (event: Event) => {
                 :variant="event.is_active ? 'outline' : 'default'"
                 size="sm"
               >
-                {{ event.is_active ? 'Deactivate' : 'Activate' }}
+                {{ event.is_active ? 'Desactivar' : 'Activar' }}
               </Button>
               <Button @click="openEditDialog(event)" variant="outline" size="sm">
-                Edit
+                Editar
               </Button>
               <Button @click="handleDelete(event)" variant="destructive" size="sm">
-                Delete
+                Eliminar
               </Button>
             </div>
           </div>
@@ -187,12 +187,12 @@ const toggleActive = async (event: Event) => {
     >
       <Card class="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <CardHeader>
-          <CardTitle>{{ editingEvent ? 'Edit Event' : 'Create Event' }}</CardTitle>
+          <CardTitle>{{ editingEvent ? 'Editar Evento' : 'Crear Evento' }}</CardTitle>
         </CardHeader>
         <CardContent>
           <form @submit.prevent="handleSubmit" class="space-y-4">
             <div>
-              <Label for="name">Event Name *</Label>
+              <Label for="name">Nombre del Evento *</Label>
               <Input 
                 id="name"
                 v-model="form.name"
@@ -202,7 +202,7 @@ const toggleActive = async (event: Event) => {
             </div>
 
             <div>
-              <Label for="description">Description</Label>
+              <Label for="description">Descripción</Label>
               <Textarea 
                 id="description"
                 v-model="form.description"
@@ -213,7 +213,7 @@ const toggleActive = async (event: Event) => {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label for="event_date">Event Date & Time *</Label>
+                <Label for="event_date">Fecha y Hora del Evento *</Label>
                 <Input 
                   id="event_date"
                   v-model="form.event_date"
@@ -224,7 +224,7 @@ const toggleActive = async (event: Event) => {
               </div>
 
               <div>
-                <Label for="location">Location *</Label>
+                <Label for="location">Ubicación *</Label>
                 <Input 
                   id="location"
                   v-model="form.location"
@@ -235,7 +235,7 @@ const toggleActive = async (event: Event) => {
             </div>
 
             <div>
-              <Label for="address">Full Address</Label>
+              <Label for="address">Dirección Completa</Label>
               <Input 
                 id="address"
                 v-model="form.address"
@@ -245,7 +245,7 @@ const toggleActive = async (event: Event) => {
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label for="capacity">Capacity *</Label>
+                <Label for="capacity">Capacidad *</Label>
                 <Input 
                   id="capacity"
                   v-model.number="form.capacity"
@@ -257,7 +257,7 @@ const toggleActive = async (event: Event) => {
               </div>
 
               <div>
-                <Label for="price">Price (USD) *</Label>
+                <Label for="price">Precio (USD) *</Label>
                 <Input 
                   id="price"
                   v-model.number="form.price"
@@ -276,10 +276,10 @@ const toggleActive = async (event: Event) => {
 
             <div class="flex gap-2 justify-end pt-4">
               <Button type="button" @click="closeDialog" variant="outline">
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" :disabled="eventsStore.loading">
-                {{ eventsStore.loading ? 'Saving...' : (editingEvent ? 'Update' : 'Create') }}
+                {{ eventsStore.loading ? 'Guardando...' : (editingEvent ? 'Actualizar' : 'Crear') }}
               </Button>
             </div>
           </form>

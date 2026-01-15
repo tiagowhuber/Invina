@@ -14,13 +14,13 @@
               to="/" 
               class="text-foreground hover:text-primary transition-colors"
             >
-              Events
+              Eventos
             </router-link>
             <router-link 
               to="/orders/lookup" 
               class="text-foreground hover:text-primary transition-colors"
             >
-              My Orders
+              Mis Pedidos
             </router-link>
             <router-link 
               to="/admin" 
@@ -39,7 +39,7 @@
 
     <footer class="border-t mt-12">
       <div class="container mx-auto px-4 py-6 text-center text-muted-foreground text-sm">
-        <p>&copy; 2025 Invina. Event Ticketing Platform.</p>
+        <p>&copy; 2025 Invina. Plataforma de Venta de Entradas.</p>
       </div>
     </footer>
   </div>

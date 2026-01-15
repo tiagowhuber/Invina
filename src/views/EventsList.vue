@@ -26,7 +26,7 @@ watch(() => eventsStore.events, (newEvents) => {
 }, { immediate: true })
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -51,9 +51,9 @@ const viewEventDetail = (eventId: number) => {
 <template>
   <div class="w-full">
     <div class="mb-8">
-      <h1 class="text-3xl md:text-4xl font-bold mb-2">Upcoming Events</h1>
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Próximos Eventos</h1>
       <p class="text-muted-foreground">
-        Browse and purchase tickets for exciting events
+        Explora y compra entradas para eventos emocionantes
       </p>
     </div>
 
@@ -77,13 +77,13 @@ const viewEventDetail = (eventId: number) => {
     <div v-else-if="eventsStore.error" class="text-center py-12">
       <p class="text-destructive">{{ eventsStore.error }}</p>
       <Button @click="eventsStore.fetchEvents()" class="mt-4">
-        Try Again
+        Intentar de Nuevo
       </Button>
     </div>
 
     <div v-else-if="eventsStore.availableEvents.length === 0" class="text-center py-12">
       <p class="text-muted-foreground text-lg">
-        No events available at the moment. Check back soon!
+        No hay eventos disponibles en este momento. ¡Vuelve pronto!
       </p>
     </div>
 
@@ -98,10 +98,10 @@ const viewEventDetail = (eventId: number) => {
           <CardTitle class="text-xl">{{ event.name }}</CardTitle>
           <div class="flex gap-2 mt-2">
             <Badge variant="secondary">
-              {{ event.tickets_available }} tickets left
+              {{ event.tickets_available }} entradas restantes
             </Badge>
             <Badge v-if="event.tickets_available < 10" variant="destructive">
-              Almost sold out!
+              ¡Casi agotado!
             </Badge>
           </div>
         </CardHeader>
@@ -125,7 +125,7 @@ const viewEventDetail = (eventId: number) => {
                 {{ formatPrice(event.price) }}
               </span>
               <Button size="sm">
-                View Details
+                Ver Detalles
               </Button>
             </div>
           </div>

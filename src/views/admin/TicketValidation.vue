@@ -18,7 +18,7 @@ const error = ref<string | null>(null)
 const successMessage = ref<string | null>(null)
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -93,16 +93,16 @@ const canMarkAsUsed = () => {
 
 <template>
   <div class="w-full max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Ticket Validation</h1>
+    <h1 class="text-3xl font-bold mb-6">Validación de Entradas</h1>
 
     <Card class="mb-6">
       <CardHeader>
-        <CardTitle>Scan or Enter Ticket</CardTitle>
+        <CardTitle>Escanear o Ingresar Entrada</CardTitle>
       </CardHeader>
       <CardContent>
         <form @submit.prevent="searchTicket" class="space-y-4">
           <div>
-            <Label for="ticketNumber">Ticket Number</Label>
+            <Label for="ticketNumber">Número de Entrada</Label>
             <Input 
               id="ticketNumber"
               v-model="ticketNumber"
@@ -111,7 +111,7 @@ const canMarkAsUsed = () => {
               autofocus
             />
             <p class="text-xs text-muted-foreground mt-1">
-              Scan the QR code or enter the ticket number manually
+              Escanea el código QR o ingresa el número de entrada manualmente
             </p>
           </div>
 
@@ -121,14 +121,14 @@ const canMarkAsUsed = () => {
               :disabled="!ticketNumber.trim() || loading"
               class="flex-1"
             >
-              {{ loading ? 'Searching...' : 'Validate Ticket' }}
+              {{ loading ? 'Buscando...' : 'Validar Entrada' }}
             </Button>
             <Button 
               type="button"
               @click="reset"
               variant="outline"
             >
-              Clear
+              Limpiar
             </Button>
           </div>
 
@@ -160,22 +160,22 @@ const canMarkAsUsed = () => {
         <div class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p class="text-sm text-muted-foreground">Ticket Number</p>
+              <p class="text-sm text-muted-foreground">Número de Entrada</p>
               <p class="font-mono font-semibold">{{ ticket.ticket_number }}</p>
             </div>
             <div>
-              <p class="text-sm text-muted-foreground">Order Number</p>
+              <p class="text-sm text-muted-foreground">Número de Pedido</p>
               <p class="font-mono font-semibold">{{ ticket.order_number }}</p>
             </div>
           </div>
 
           <div>
-            <p class="text-sm text-muted-foreground">Event Date & Time</p>
+            <p class="text-sm text-muted-foreground">Fecha y Hora del Evento</p>
             <p class="font-medium">{{ formatDate(ticket.event_date) }}</p>
           </div>
 
           <div>
-            <p class="text-sm text-muted-foreground">Location</p>
+            <p class="text-sm text-muted-foreground">Ubicación</p>
             <p class="font-medium">{{ ticket.location }}</p>
             <p v-if="ticket.address" class="text-xs text-muted-foreground mt-1">
               {{ ticket.address }}
@@ -184,12 +184,12 @@ const canMarkAsUsed = () => {
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p class="text-sm text-muted-foreground">Customer</p>
+              <p class="text-sm text-muted-foreground">Cliente</p>
               <p class="font-medium">{{ ticket.customer_name }}</p>
               <p class="text-xs text-muted-foreground">{{ ticket.customer_email }}</p>
             </div>
             <div v-if="ticket.attendee_name">
-              <p class="text-sm text-muted-foreground">Attendee</p>
+              <p class="text-sm text-muted-foreground">Asistente</p>
               <p class="font-medium">{{ ticket.attendee_name }}</p>
             </div>
           </div>
@@ -199,7 +199,7 @@ const canMarkAsUsed = () => {
               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span class="text-2xl font-bold text-green-700">VALID TICKET</span>
+              <span class="text-2xl font-bold text-green-700">ENTRADA VÁLIDA</span>
             </div>
             <Button 
               @click="markAsUsed"
@@ -207,7 +207,7 @@ const canMarkAsUsed = () => {
               class="w-full"
               size="lg"
             >
-              {{ loading ? 'Processing...' : 'Mark as Used & Allow Entry' }}
+              {{ loading ? 'Procesando...' : 'Marcar como Usada y Permitir Entrada' }}
             </Button>
           </div>
 
@@ -215,16 +215,16 @@ const canMarkAsUsed = () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-lg font-bold text-gray-700">ALREADY USED</p>
-            <p class="text-sm text-gray-600 mt-2">This ticket has already been validated</p>
+            <p class="text-lg font-bold text-gray-700">YA USADA</p>
+            <p class="text-sm text-gray-600 mt-2">Esta entrada ya ha sido validada</p>
           </div>
 
           <div v-else class="bg-red-500/10 p-4 rounded-lg border-2 border-red-500 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-lg font-bold text-red-700">INVALID TICKET</p>
-            <p class="text-sm text-red-600 mt-2">This ticket cannot be used ({{ ticket.status }})</p>
+            <p class="text-lg font-bold text-red-700">ENTRADA INVÁLIDA</p>
+            <p class="text-sm text-red-600 mt-2">Esta entrada no se puede usar ({{ ticket.status }})</p>
           </div>
         </div>
       </CardContent>

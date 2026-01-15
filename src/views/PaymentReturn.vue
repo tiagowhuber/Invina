@@ -84,15 +84,15 @@ const handleBackToEvents = () => {
   <div class="w-full max-w-2xl mx-auto">
     <Card>
       <CardHeader>
-        <CardTitle>Payment Processing</CardTitle>
+        <CardTitle>Procesando Pago</CardTitle>
       </CardHeader>
       <CardContent>
         <!-- Processing State -->
         <div v-if="isProcessing" class="text-center py-8">
           <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-primary mb-4"></div>
-          <p class="text-lg mb-2">Processing your payment...</p>
+          <p class="text-lg mb-2">Procesando tu pago...</p>
           <p class="text-sm text-muted-foreground">
-            Please wait while we confirm your transaction.
+            Por favor espera mientras confirmamos tu transacción.
           </p>
         </div>
 
@@ -102,23 +102,23 @@ const handleBackToEvents = () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-2xl font-bold mb-2">Payment Successful!</p>
-            <p class="text-sm">Your order has been confirmed.</p>
+            <p class="text-2xl font-bold mb-2">¡Pago Exitoso!</p>
+            <p class="text-sm">Tu pedido ha sido confirmado.</p>
           </div>
           <div v-if="orderNumber" class="mb-6 p-4 bg-muted rounded-lg">
-            <p class="text-sm text-muted-foreground mb-1">Order Number</p>
+            <p class="text-sm text-muted-foreground mb-1">Número de Pedido</p>
             <p class="text-lg font-mono font-semibold">{{ orderNumber }}</p>
           </div>
           <div class="flex gap-4 justify-center">
             <Button @click="handleViewOrder" v-if="orderNumber">
-              View Order Details
+              Ver Detalles del Pedido
             </Button>
             <Button @click="handleBackToEvents" variant="outline">
-              Back to Events
+              Volver a Eventos
             </Button>
           </div>
           <p class="text-xs text-muted-foreground mt-6">
-            A confirmation email has been sent to your email address.
+            Se ha enviado un correo de confirmación a tu dirección de correo electrónico.
           </p>
         </div>
 
@@ -128,15 +128,15 @@ const handleBackToEvents = () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <p class="text-2xl font-bold mb-2">Payment Failed</p>
+            <p class="text-2xl font-bold mb-2">Pago Fallido</p>
             <p class="text-sm">{{ errorMessage }}</p>
           </div>
           <div class="flex gap-4 justify-center mt-6">
             <Button @click="router.push('/checkout')" v-if="orderNumber">
-              Try Again
+              Intentar de Nuevo
             </Button>
             <Button @click="handleBackToEvents" variant="outline">
-              Back to Events
+              Volver a Eventos
             </Button>
           </div>
         </div>
@@ -147,15 +147,15 @@ const handleBackToEvents = () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-2xl font-bold mb-2">Payment Error</p>
-            <p class="text-sm">{{ errorMessage || 'An error occurred while processing your payment' }}</p>
+            <p class="text-2xl font-bold mb-2">Error de Pago</p>
+            <p class="text-sm">{{ errorMessage || 'Ocurrió un error al procesar tu pago' }}</p>
           </div>
           <div class="flex gap-4 justify-center mt-6">
             <Button @click="router.push('/orders/lookup')" variant="outline">
-              Check My Orders
+              Revisar Mis Pedidos
             </Button>
             <Button @click="handleBackToEvents" variant="outline">
-              Back to Events
+              Volver a Eventos
             </Button>
           </div>
         </div>

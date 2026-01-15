@@ -55,7 +55,7 @@ const formatPrice = (price: number) => {
 }
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -66,9 +66,9 @@ const formatDate = (dateString: string) => {
 <template>
   <div class="w-full">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">Statistics & Reports</h1>
+      <h1 class="text-3xl font-bold">Estadísticas e Informes</h1>
       <Button @click="loadStatistics" variant="outline" :disabled="loading">
-        {{ loading ? 'Loading...' : 'Refresh' }}
+        {{ loading ? 'Cargando...' : 'Actualizar' }}
       </Button>
     </div>
 
@@ -81,7 +81,7 @@ const formatDate = (dateString: string) => {
     <div v-else class="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Payment Statistics</CardTitle>
+          <CardTitle>Estadísticas de Pago</CardTitle>
         </CardHeader>
         <CardContent>
           <div v-if="transactionStats" class="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -91,30 +91,30 @@ const formatDate = (dateString: string) => {
             </div>
             <div class="text-center p-4 bg-green-500/10 rounded-lg">
               <p class="text-2xl font-bold text-green-700">{{ transactionStats.approved }}</p>
-              <p class="text-sm text-muted-foreground">Approved</p>
+              <p class="text-sm text-muted-foreground">Aprobados</p>
             </div>
             <div class="text-center p-4 bg-yellow-500/10 rounded-lg">
               <p class="text-2xl font-bold text-yellow-700">{{ transactionStats.pending }}</p>
-              <p class="text-sm text-muted-foreground">Pending</p>
+              <p class="text-sm text-muted-foreground">Pendientes</p>
             </div>
             <div class="text-center p-4 bg-red-500/10 rounded-lg">
               <p class="text-2xl font-bold text-red-700">{{ transactionStats.rejected + transactionStats.failed }}</p>
-              <p class="text-sm text-muted-foreground">Failed</p>
+              <p class="text-sm text-muted-foreground">Fallidos</p>
             </div>
             <div class="text-center p-4 bg-primary/10 rounded-lg">
               <p class="text-2xl font-bold text-primary">{{ formatPrice(transactionStats.total_approved_amount) }}</p>
-              <p class="text-sm text-muted-foreground">Revenue</p>
+              <p class="text-sm text-muted-foreground">Ingresos</p>
             </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-8">
-            No transaction data available
+            No hay datos de transacciones disponibles
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Event Statistics</CardTitle>
+          <CardTitle>Estadísticas de Eventos</CardTitle>
         </CardHeader>
         <CardContent>
           <div v-if="eventsStore.events.length > 0" class="space-y-4">
@@ -130,52 +130,52 @@ const formatDate = (dateString: string) => {
                   <p class="text-sm text-muted-foreground">{{ event.location }}</p>
                 </div>
                 <Badge :variant="event.is_active ? 'default' : 'outline'">
-                  {{ event.is_active ? 'Active' : 'Inactive' }}
+                  {{ event.is_active ? 'Activo' : 'Inactivo' }}
                 </Badge>
               </div>
 
               <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="text-center p-3 bg-secondary/50 rounded">
                   <p class="text-xl font-bold">{{ event.capacity }}</p>
-                  <p class="text-xs text-muted-foreground">Capacity</p>
+                  <p class="text-xs text-muted-foreground">Capacidad</p>
                 </div>
                 <div class="text-center p-3 bg-blue-500/10 rounded">
                   <p class="text-xl font-bold text-blue-700">{{ event.tickets_sold }}</p>
-                  <p class="text-xs text-muted-foreground">Sold</p>
+                  <p class="text-xs text-muted-foreground">Vendidas</p>
                 </div>
                 <div class="text-center p-3 bg-green-500/10 rounded">
                   <p class="text-xl font-bold text-green-700">{{ event.tickets_available }}</p>
-                  <p class="text-xs text-muted-foreground">Available</p>
+                  <p class="text-xs text-muted-foreground">Disponibles</p>
                 </div>
                 <div class="text-center p-3 bg-purple-500/10 rounded">
                   <p class="text-xl font-bold text-purple-700">
                     {{ event.capacity > 0 ? Math.round((event.tickets_sold / event.capacity) * 100) : 0 }}%
                   </p>
-                  <p class="text-xs text-muted-foreground">Sold Rate</p>
+                  <p class="text-xs text-muted-foreground">% Vendidas</p>
                 </div>
                 <div class="text-center p-3 bg-primary/10 rounded">
                   <p class="text-xl font-bold text-primary">{{ formatPrice(event.price * event.tickets_sold) }}</p>
-                  <p class="text-xs text-muted-foreground">Revenue</p>
+                  <p class="text-xs text-muted-foreground">Ingresos</p>
                 </div>
               </div>
 
               <div v-if="eventStats.get(event.id)" class="mt-4 pt-4 border-t">
-                <p class="text-sm font-semibold mb-2">Ticket Status Breakdown:</p>
+                <p class="text-sm font-semibold mb-2">Desglose del Estado de Entradas:</p>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                   <div class="flex justify-between">
-                    <span class="text-muted-foreground">Reserved:</span>
+                    <span class="text-muted-foreground">Reservadas:</span>
                     <span class="font-medium">{{ eventStats.get(event.id)?.reserved || 0 }}</span>
                   </div>
                   <div class="flex justify-between">
-                    <span class="text-muted-foreground">Confirmed:</span>
+                    <span class="text-muted-foreground">Confirmadas:</span>
                     <span class="font-medium">{{ eventStats.get(event.id)?.confirmed || 0 }}</span>
                   </div>
                   <div class="flex justify-between">
-                    <span class="text-muted-foreground">Used:</span>
+                    <span class="text-muted-foreground">Usadas:</span>
                     <span class="font-medium">{{ eventStats.get(event.id)?.used || 0 }}</span>
                   </div>
                   <div class="flex justify-between">
-                    <span class="text-muted-foreground">Cancelled:</span>
+                    <span class="text-muted-foreground">Canceladas:</span>
                     <span class="font-medium">{{ eventStats.get(event.id)?.cancelled || 0 }}</span>
                   </div>
                 </div>
@@ -183,7 +183,7 @@ const formatDate = (dateString: string) => {
             </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-8">
-            No events available
+            No hay eventos disponibles
           </div>
         </CardContent>
       </Card>

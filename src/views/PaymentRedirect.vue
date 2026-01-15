@@ -58,14 +58,14 @@ onMounted(async () => {
   <div class="w-full max-w-2xl mx-auto">
     <Card>
       <CardHeader>
-        <CardTitle>Redirecting to Payment</CardTitle>
+        <CardTitle>Redirigiendo al Pago</CardTitle>
       </CardHeader>
       <CardContent>
         <div v-if="paymentStore.loading || isRedirecting" class="text-center py-8">
           <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-primary mb-4"></div>
-          <p class="text-lg mb-2">Preparing your payment...</p>
+          <p class="text-lg mb-2">Preparando tu pago...</p>
           <p class="text-sm text-muted-foreground">
-            You will be redirected to WebPay to complete your purchase.
+            Serás redirigido a WebPay para completar tu compra.
           </p>
         </div>
 
@@ -74,15 +74,15 @@ onMounted(async () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-lg font-semibold mb-2">Payment Initiation Failed</p>
+            <p class="text-lg font-semibold mb-2">Error al Iniciar el Pago</p>
             <p class="text-sm">{{ paymentStore.error }}</p>
           </div>
           <div class="flex gap-4 justify-center mt-6">
             <Button @click="router.push('/orders/lookup')" variant="outline">
-              View My Orders
+              Ver Mis Pedidos
             </Button>
             <Button @click="router.push('/')">
-              Back to Events
+              Volver a Eventos
             </Button>
           </div>
         </div>
