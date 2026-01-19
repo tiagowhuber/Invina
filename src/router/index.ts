@@ -13,17 +13,17 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
-          component: () => import('@/views/EventsList.vue'),
+          component: () => import('@/views/ToursList.vue'),
         },
         {
-          path: '/events/:id',
-          name: 'event-detail',
-          component: () => import('@/views/EventDetail.vue'),
+          path: '/tours/:id',
+          name: 'tour-detail',
+          component: () => import('@/views/TourDetail.vue'),
         },
         {
-          path: '/checkout',
-          name: 'checkout',
-          component: () => import('@/views/Checkout.vue'),
+          path: '/tours/:id/booking',
+          name: 'tour-booking',
+          component: () => import('@/views/TourBooking.vue'),
         },
         {
           path: '/payment',
@@ -36,14 +36,14 @@ const router = createRouter({
           component: () => import('@/views/PaymentReturn.vue'),
         },
         {
-          path: '/orders/:orderNumber',
-          name: 'order-confirmation',
-          component: () => import('@/views/OrderConfirmation.vue'),
+          path: '/bookings/:orderNumber',
+          name: 'booking-confirmation',
+          component: () => import('@/views/BookingConfirmation.vue'),
         },
         {
-          path: '/orders/lookup',
-          name: 'order-lookup',
-          component: () => import('@/views/OrderLookup.vue'),
+          path: '/bookings/lookup',
+          name: 'booking-lookup',
+          component: () => import('@/views/BookingLookup.vue'),
         },
         {
           path: '/tickets/:ticketNumber',
@@ -64,13 +64,13 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'admin-events',
-          component: () => import('@/views/admin/EventManagement.vue'),
+          name: 'admin-tours',
+          component: () => import('@/views/admin/TourManagement.vue'),
         },
         {
-          path: 'orders',
-          name: 'admin-orders',
-          component: () => import('@/views/admin/OrdersDashboard.vue'),
+          path: 'bookings',
+          name: 'admin-bookings',
+          component: () => import('@/views/admin/BookingsDashboard.vue'),
         },
         {
           path: 'validate',
