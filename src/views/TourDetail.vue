@@ -22,7 +22,7 @@
           <div class="p-8">
             <div class="flex items-start justify-between mb-4">
               <h1 class="text-3xl font-bold">{{ currentTour.name }}</h1>
-              <span class="inline-block px-[12px] py-[4px] text-sm font-semibold rounded-full" :class="tourTypeBadgeClass">
+              <span class="inline-block px-3 py-1 text-sm font-semibold rounded-full" :class="tourTypeBadgeClass">
                 {{ tourTypeLabel }}
               </span>
             </div>

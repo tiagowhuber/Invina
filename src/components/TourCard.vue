@@ -3,7 +3,7 @@
     <div class="p-6">
       <div class="flex items-start justify-between mb-2">
         <h3 class="text-xl font-semibold">{{ tour.name }}</h3>
-        <span class="inline-block px-[8px] py-[4px] text-xs font-semibold rounded-full" :class="tourTypeBadgeClass">
+        <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full" :class="tourTypeBadgeClass">
           {{ tourTypeLabel }}
         </span>
       </div>
@@ -85,6 +85,7 @@ const tourTypeBadgeClass = computed(() => {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
