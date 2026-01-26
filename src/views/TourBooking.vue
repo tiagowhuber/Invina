@@ -19,7 +19,7 @@
         <div v-else class="bg-white rounded-lg shadow-lg p-8">
           <!-- Tour Info -->
           <div class="mb-8 p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
-            <h2 class="text-xl font-bold mb-2 break-words">{{ currentTour.description }}</h2>
+            <h2 class="text-xl font-bold mb-2 wrap-break-word">{{ currentTour.description }}</h2>
             <div class="text-gray-600 flex gap-4 text-sm mt-3">
                <span>⏱ {{ currentTour.durationMinutes }} Minutos</span>
                <span>🏷 {{ currentTour.tourType }}</span>

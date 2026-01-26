@@ -34,23 +34,23 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="tour in allTours" :key="tour.id">
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="font-medium text-gray-900">{{ tour.name }}</div>
-              <div class="text-sm text-gray-500">{{ tour.location }}</div>
+              <div class="font-medium text-gray-900">Tour #{{ tour.id }}</div>
+              <div class="text-sm text-gray-500">{{ tour.description }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <span :class="getTourTypeBadge(tour.tour_type)">
-                {{ formatTourType(tour.tour_type) }}
+              <span :class="getTourTypeBadge(tour.tourType)">
+                {{ tour.tourType }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-              ${{ tour.base_price }}
+              ${{ tour.basePrice }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-gray-900">
-              {{ tour.max_capacity }}
+              {{ tour.maxAttendants }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <span :class="tour.is_active ? 'px-2 py-1 text-xs rounded-full bg-green-100 text-green-800' : 'px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800'">
-                {{ tour.is_active ? 'Activo' : 'Inactivo' }}
+              <span :class="tour.isActive ? 'px-2 py-1 text-xs rounded-full bg-green-100 text-green-800' : 'px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800'">
+                {{ tour.isActive ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
@@ -64,7 +64,7 @@
                 @click="toggleTourStatus(tour)"
                 class="text-yellow-600 hover:text-yellow-900"
               >
-                {{ tour.is_active ? 'Desactivar' : 'Activar' }}
+                {{ tour.isActive ? 'Desactivar' : 'Activar' }}
               </button>
             </td>
           </tr>
@@ -105,21 +105,11 @@ const showCreateModal = ref(false)
 
 const allTours = computed(() => toursStore.tours)
 
-function formatTourType(type: TourType): string {
-  const typeMap: Record<TourType, string> = {
-    'option_1': 'Wine Selection',
-    'option_2': 'Standard',
-    'option_3': 'Shared Daily'
-  }
-  return typeMap[type] || type
-}
-
 function getTourTypeBadge(type: TourType): string {
   const baseClasses = 'px-2 py-1 text-xs rounded-full'
   const typeColors: Record<TourType, string> = {
-    'option_1': 'bg-purple-100 text-purple-800',
-    'option_2': 'bg-blue-100 text-blue-800',
-    'option_3': 'bg-orange-100 text-orange-800'
+    'Standard': 'bg-blue-100 text-blue-800',
+    'Special': 'bg-purple-100 text-purple-800'
   }
   return `${baseClasses} ${typeColors[type]}`
 }
