@@ -16,6 +16,11 @@ const router = createRouter({
           component: () => import('@/views/ToursList.vue'),
         },
         {
+          path: '/tours/:id',
+          name: 'tour-detail',
+          component: () => import('@/views/TourDetail.vue'),
+        },
+        {
           path: '/tours/:id/booking',
           name: 'tour-booking',
           component: () => import('@/views/TourBooking.vue'),

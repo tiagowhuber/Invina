@@ -28,10 +28,10 @@
       </div>
 
       <router-link 
-        :to="{ name: 'tour-booking', params: { id: tour.id }}"
-        class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition-colors"
+        :to="{ name: 'tour-detail', params: { id: tour.id }}"
+        class="block w-full text-center bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded transition-colors"
       >
-        Reservar Ahora
+        Ver Más
       </router-link>
     </div>
   </div>
