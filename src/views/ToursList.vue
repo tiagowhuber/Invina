@@ -12,39 +12,26 @@
       </div>
 
       <div v-else class="space-y-8">
-        <!-- Option 1 Tours -->
-        <section v-if="toursByType.option_1.length > 0">
-          <h2 class="text-2xl font-semibold mb-4">Premium Wine Selection Tours</h2>
-          <p class="text-gray-600 mb-4">Choose your favorite wines from our selection</p>
+        <!-- Standard Tours -->
+        <section v-if="toursByType.Standard.length > 0">
+          <h2 class="text-2xl font-semibold mb-4">Standard Tours</h2>
+          <p class="text-gray-600 mb-4">Experience our classic wine selection (Mon-Sat).</p>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <TourCard
-              v-for="tour in toursByType.option_1"
+              v-for="tour in toursByType.Standard"
               :key="tour.id"
               :tour="tour"
             />
           </div>
         </section>
 
-        <!-- Option 2 Tours -->
-        <section v-if="toursByType.option_2.length > 0">
-          <h2 class="text-2xl font-semibold mb-4">Standard Wine Tours</h2>
-          <p class="text-gray-600 mb-4">Pre-selected wine experience</p>
+        <!-- Special Tours -->
+        <section v-if="toursByType.Special.length > 0">
+          <h2 class="text-2xl font-semibold mb-4">Special Tours</h2>
+          <p class="text-gray-600 mb-4">Exclusive experiences available every day.</p>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <TourCard
-              v-for="tour in toursByType.option_2"
-              :key="tour.id"
-              :tour="tour"
-            />
-          </div>
-        </section>
-
-        <!-- Option 3 Tours -->
-        <section v-if="toursByType.option_3.length > 0">
-          <h2 class="text-2xl font-semibold mb-4">Daily Group Tours</h2>
-          <p class="text-gray-600 mb-4">Join our daily group wine experience</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <TourCard
-              v-for="tour in toursByType.option_3"
+              v-for="tour in toursByType.Special"
               :key="tour.id"
               :tour="tour"
             />
@@ -60,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useToursStore } from '@/stores/tours'
 import TourCard from '@/components/TourCard.vue'

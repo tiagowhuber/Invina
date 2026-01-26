@@ -1,34 +1,31 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { toursApi } from '@/services/api/tours'
-import type { Tour, Wine, TourAvailabilityResponse } from '@/types'
+import { toursApi } from '@/services/api' // Updated import path
+import type { Tour } from '@/types'
 
 export const useToursStore = defineStore('tours', () => {
   const tours = ref<Tour[]>([])
   const currentTour = ref<Tour | null>(null)
-  const tourWines = ref<Wine[]>([])
-  const availability = ref<TourAvailabilityResponse | null>(null)
+  const currentSlots = ref<string[]>([]) // Changed from AvailabilityResponse
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   const activeTours = computed(() => 
-    tours.value.filter(tour => tour.is_active)
+    tours.value.filter(tour => tour.isActive)
   )
 
   const toursByType = computed(() => ({
-    option_1: tours.value.filter(t => t.tour_type === 'option_1' && t.is_active),
-    option_2: tours.value.filter(t => t.tour_type === 'option_2' && t.is_active),
-    option_3: tours.value.filter(t => t.tour_type === 'option_3' && t.is_active),
+    Standard: tours.value.filter(t => t.tourType === 'Standard' && t.isActive),
+    Special: tours.value.filter(t => t.tourType === 'Special' && t.isActive),
   }))
 
   async function fetchTours() {
     loading.value = true
     error.value = null
     try {
-      const response = await toursApi.getAll()
-      if (response.data.success && response.data.data) {
-        tours.value = response.data.data
-      }
+      // Backend returns plain array now
+      const data = await toursApi.getAll() 
+      tours.value = data
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Failed to fetch tours'
       console.error('Error fetching tours:', err)
@@ -37,76 +34,43 @@ export const useToursStore = defineStore('tours', () => {
     }
   }
 
-  async function fetchTourById(id: number) {
+  function getTourById(id: number) {
+    // Sync find because we fetch all at once now
+    const found = tours.value.find(t => t.id === id) || null
+    currentTour.value = found
+    return found
+  }
+
+  async function fetchSlots(tourId: number, date: string) {
     loading.value = true
     error.value = null
     try {
-      const response = await toursApi.getById(id)
-      if (response.data.success && response.data.data) {
-        currentTour.value = response.data.data
-      }
+      const slots = await toursApi.getSlots(tourId, date)
+      currentSlots.value = slots
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Failed to fetch tour'
-      console.error('Error fetching tour:', err)
+      error.value = err.response?.data?.error || 'Failed to fetch slots'
+      console.error('Error fetching slots:', err)
+      currentSlots.value = []
     } finally {
       loading.value = false
     }
   }
 
-  async function fetchTourWines(tourId: number) {
-    loading.value = true
-    error.value = null
-    try {
-      const response = await toursApi.getWines(tourId)
-      if (response.data.success && response.data.data) {
-        tourWines.value = response.data.data
-      }
-    } catch (err: any) {
-      error.value = err.response?.data?.error || 'Failed to fetch wines'
-      console.error('Error fetching wines:', err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  async function fetchAvailability(tourId: number, date: string) {
-    loading.value = true
-    error.value = null
-    try {
-      const response = await toursApi.getAvailability(tourId, date)
-      if (response.data.success && response.data.data) {
-        availability.value = response.data.data
-      }
-    } catch (err: any) {
-      error.value = err.response?.data?.error || 'Failed to fetch availability'
-      console.error('Error fetching availability:', err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  function resetAvailability() {
-    availability.value = null
-  }
-
-  function resetWines() {
-    tourWines.value = []
+  function resetSlots() {
+    currentSlots.value = []
   }
 
   return {
     tours,
     currentTour,
-    tourWines,
-    availability,
+    currentSlots,
     loading,
     error,
     activeTours,
     toursByType,
     fetchTours,
-    fetchTourById,
-    fetchTourWines,
-    fetchAvailability,
-    resetAvailability,
-    resetWines,
+    getTourById,
+    fetchSlots,
+    resetSlots
   }
 })
