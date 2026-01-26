@@ -10,13 +10,19 @@ import type {
 export const webpayApi = {
   // Initiate payment transaction
   initiate: (data: InitiatePaymentRequest) => {
-    return apiClient.post<ApiResponse<InitiatePaymentResponse>>('/webpay/initiate', data)
+    return apiClient.post<ApiResponse<InitiatePaymentResponse>>('/payments/create', data)
   },
 
   // Get transaction status
   getTransaction: (token: string) => {
-    return apiClient.get<ApiResponse<WebPayTransaction>>(`/webpay/transaction/${token}`)
+    return apiClient.get<ApiResponse<WebPayTransaction>>(`/payments/verify/${token}`)
   },
+
+  // Verify payment (Alias)
+  verify: (token: string) => {
+    return apiClient.get<ApiResponse<any>>(`/payments/verify/${token}`)
+  },
+
 
   // Get all transactions (admin)
   getAllTransactions: () => {

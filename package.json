@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "axios": "^1.13.1",
+    "jsonwebtoken": "^9.0.3",
     "pinia": "^3.0.3",
     "qrcode.vue": "^3.6.0",
     "vue": "^3.5.22",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.1.16",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.9.2",
     "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.21",

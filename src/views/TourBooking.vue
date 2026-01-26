@@ -228,26 +228,9 @@ async function handleSubmit() {
      })
 
      if (response.paymentUrl && response.token) {
-        // Redirection to Transbank WebPay
-        // We must construct a form and submit it, or if it's GET, just window.location
-        // WebPay usually uses POST or GET depending on integration. 
-        // SDK v1.x used POST forms. Newer returns a URL + token to GET?
-        // Standard Webpay Plus creates a URL like: https://webpay3gint.transbank.cl/rswebpaytransaction/api/webpay/v1.0/transactions
-        // The service returns `url` and `token`. The user must POST token to url.
-        
-        // Auto-submit form creation
-        const form = document.createElement('form');
-        form.method = 'POST'; // Usually POST for WebPay
-        form.action = response.paymentUrl;
-
-        const tokenInput = document.createElement('input');
-        tokenInput.type = 'hidden';
-        tokenInput.name = 'token_ws';
-        tokenInput.value = response.token;
-        
-        form.appendChild(tokenInput);
-        document.body.appendChild(form);
-        form.submit();
+        // Redirection to VirtualPOS
+        // The URL provided by the backend is the Web Checkout URL
+        window.location.href = response.paymentUrl;
      }
 
   } catch (err: any) {
