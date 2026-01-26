@@ -19,7 +19,7 @@
         </div>
         <div class="flex items-center gap-1">
           <span class="font-bold">👥</span>
-          <span>Max {{ tour.maxAttendants }}</span>
+          <span>Máx {{ tour.maxAttendants }}</span>
         </div>
          <div class="flex items-center gap-1">
           <span class="font-bold">$</span>
@@ -31,7 +31,7 @@
         :to="{ name: 'tour-booking', params: { id: tour.id }}"
         class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition-colors"
       >
-        Book Now
+        Reservar Ahora
       </router-link>
     </div>
   </div>

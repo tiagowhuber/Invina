@@ -27,7 +27,7 @@ export const useToursStore = defineStore('tours', () => {
       const data = await toursApi.getAll() 
       tours.value = data
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Failed to fetch tours'
+      error.value = err.response?.data?.error || 'Error al cargar los tours'
       console.error('Error fetching tours:', err)
     } finally {
       loading.value = false
@@ -48,7 +48,7 @@ export const useToursStore = defineStore('tours', () => {
       const slots = await toursApi.getSlots(tourId, date)
       currentSlots.value = slots
     } catch (err: any) {
-      error.value = err.response?.data?.error || 'Failed to fetch slots'
+      error.value = err.response?.data?.error || 'Error al cargar los horarios disponibles'
       console.error('Error fetching slots:', err)
       currentSlots.value = []
     } finally {

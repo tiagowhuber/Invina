@@ -1,18 +1,18 @@
 <template>
   <div class="tour-management">
     <div class="mb-6 flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Tour Management</h1>
+      <h1 class="text-2xl font-bold">Gestión de Tours</h1>
       <button
         @click="showCreateModal = true"
         class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
       >
-        + Create New Tour
+        + Crear Nuevo Tour
       </button>
     </div>
 
     <div v-if="toursStore.loading" class="text-center py-12">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-      <p class="mt-4 text-gray-600">Loading tours...</p>
+      <p class="mt-4 text-gray-600">Cargando tours...</p>
     </div>
 
     <div v-else-if="toursStore.error" class="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -23,12 +23,12 @@
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tour Name</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Capacity</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre del Tour</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Capacidad</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -50,7 +50,7 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <span :class="tour.is_active ? 'px-2 py-1 text-xs rounded-full bg-green-100 text-green-800' : 'px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800'">
-                {{ tour.is_active ? 'Active' : 'Inactive' }}
+                {{ tour.is_active ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
@@ -58,13 +58,13 @@
                 @click="editTour(tour)"
                 class="text-blue-600 hover:text-blue-900"
               >
-                Edit
+                Editar
               </button>
               <button
                 @click="toggleTourStatus(tour)"
                 class="text-yellow-600 hover:text-yellow-900"
               >
-                {{ tour.is_active ? 'Deactivate' : 'Activate' }}
+                {{ tour.is_active ? 'Desactivar' : 'Activar' }}
               </button>
             </td>
           </tr>
@@ -75,19 +75,19 @@
     <!-- Create/Edit Modal (placeholder - would need full implementation) -->
     <div v-if="showCreateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
       <div class="bg-white rounded-lg max-w-2xl w-full p-6">
-        <h2 class="text-xl font-bold mb-4">Create New Tour</h2>
-        <p class="text-gray-600 mb-4">Tour creation form would go here...</p>
+        <h2 class="text-xl font-bold mb-4">Crear Nuevo Tour</h2>
+        <p class="text-gray-600 mb-4">El formulario de creación iría aquí...</p>
         <div class="flex justify-end space-x-2">
           <button
             @click="showCreateModal = false"
             class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
           >
-            Create Tour
+            Crear Tour
           </button>
         </div>
       </div>

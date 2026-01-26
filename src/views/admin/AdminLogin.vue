@@ -22,7 +22,7 @@ const handleLogin = () => {
   if (adminStore.login(password.value)) {
     router.push('/admin')
   } else {
-    error.value = 'Invalid password. Try "admin123"'
+    error.value = 'Contraseña inválida. Intenta "admin123"'
     password.value = ''
   }
 }
