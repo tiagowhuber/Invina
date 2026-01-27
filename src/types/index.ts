@@ -5,6 +5,13 @@ export type OrderStatus = 'Pending' | 'Confirmed' | 'Cancelled' | 'Refunded'
 export type PaymentStatus = 'Pending' | 'Completed' | 'Failed' | 'Refunded'
 
 // Tours
+export interface TourImage {
+  id: number
+  tourId: number
+  imageUrl: string
+  displayOrder: number
+}
+
 export interface Tour {
   id: number
   description: string
@@ -18,6 +25,7 @@ export interface Tour {
   bufferMinutes: number
   isActive: boolean
   wines?: Wine[]
+  images?: TourImage[]
 }
 
 export interface Wine {
@@ -25,6 +33,7 @@ export interface Wine {
   name: string
   varietal?: string
   vintage?: number
+  imageUrl?: string
 }
 
 // Orders
