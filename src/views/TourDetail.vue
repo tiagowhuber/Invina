@@ -108,28 +108,42 @@
                 </div>
             </div>
 
-            <!-- Wines Included -->
-            <div v-if="tour.wines && tour.wines.length > 0" class="py-8 border-t border-gray-100">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">Vinos Incluidos</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div v-for="wine in tour.wines" :key="wine.id" class="border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors bg-gray-50 overflow-hidden group">
-                        <!-- Wine Image or Fallback -->
-                        <div class="h-48 w-full bg-gray-200 relative overflow-hidden">
-                             <img 
-                                v-if="wine.imageUrl" 
-                                :src="wine.imageUrl" 
-                                :alt="wine.name" 
-                                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-300">
-                                <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            <!-- Menus Section (If Available) -->
+            <div v-if="tour.menus && tour.menus.length > 0" class="py-8 border-t border-gray-100">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Elige tu Menú</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div 
+                        v-for="menu in tour.menus" 
+                        :key="menu.id" 
+                        class="border rounded-xl p-6 hover:shadow-lg transition-shadow bg-white flex flex-col h-full"
+                    >
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-bold text-xl text-gray-900">{{ menu.name }}</h3>
+                                <p class="text-green-700 font-bold text-lg mt-1">${{ menu.price }}</p>
                             </div>
+                            <span v-if="menu.isActive" class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Disponible</span>
                         </div>
                         
-                        <div class="p-6">
-                            <h3 class="font-bold text-lg text-gray-900">{{ wine.name }}</h3>
-                            <p class="text-gray-600 mt-1">{{ wine.varietal }} <span v-if="wine.vintage" class="text-gray-400">| {{ wine.vintage }}</span></p>
+                        <p class="text-gray-600 mb-6 grow">{{ menu.description || 'Una experiencia exclusiva.' }}</p>
+
+                        <!-- Included Wines Preview -->
+                        <div v-if="menu.wines && menu.wines.length > 0" class="mb-6 bg-gray-50 p-3 rounded-lg">
+                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Vinos Incluidos</p>
+                             <ul class="space-y-1">
+                                 <li v-for="wine in menu.wines" :key="wine.id" class="text-sm text-gray-700 flex items-center">
+                                     <svg class="w-3 h-3 text-indigo-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                     {{ wine.name }}
+                                 </li>
+                             </ul>
                         </div>
+
+                        <router-link 
+                            :to="{ name: 'tour-booking', params: { id: tour.id }, query: { menuId: menu.id }}"
+                            class="w-full text-center py-2 px-4 border border-green-600 text-green-700 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition-colors"
+                        >
+                            Reservar esta Opción
+                        </router-link>
                     </div>
                 </div>
             </div>

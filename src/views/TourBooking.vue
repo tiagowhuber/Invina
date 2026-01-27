@@ -23,7 +23,10 @@
             <div class="text-gray-600 flex gap-4 text-sm mt-3">
                <span>⏱ {{ currentTour.durationMinutes }} Minutos</span>
                <span>🏷 {{ currentTour.tourType }}</span>
-               <span class="font-bold text-green-700">${{ currentTour.basePrice }} / persona</span>
+               <span class="font-bold text-green-700">
+                  <span v-if="hasMenus && !form.menuId">Desde </span>
+                  ${{ pricePerPerson }} / persona
+               </span>
             </div>
           </div>
 
@@ -66,6 +69,35 @@
                   {{ timeStr.substring(0, 5) }}
                 </button>
               </div>
+            </div>
+
+            <!-- Menu Selection -->
+            <div v-if="hasMenus" class="py-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Selecciona un Menú</label>
+                <div class="space-y-3">
+                    <div 
+                        v-for="menu in currentTour.menus" 
+                        :key="menu.id"
+                        @click="form.menuId = menu.id"
+                        :class="[
+                            'p-4 border rounded-lg cursor-pointer transition-all flex justify-between items-center group',
+                            form.menuId === menu.id ? 'border-green-600 bg-green-50 ring-1 ring-green-600' : 'border-gray-200 hover:border-green-300'
+                        ]"
+                    >
+                        <div>
+                            <span class="font-bold text-gray-800 group-hover:text-green-700 transition-colors">{{ menu.name }}</span>
+                            <p class="text-sm text-gray-600">{{ menu.description || 'Incluye selección de vinos exclusiva.' }}</p>
+                            <div v-if="menu.wines && menu.wines.length > 0" class="text-xs text-green-600 mt-1 flex flex-wrap gap-1">
+                                <span v-for="(wine, idx) in menu.wines" :key="wine.id" class="bg-green-100 px-1 rounded">
+                                    {{ wine.name }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="font-bold text-green-700 whitespace-nowrap ml-4">
+                            ${{ menu.price }} 
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Ticket Quantity -->
@@ -178,22 +210,40 @@ const form = ref({
   customerName: '',
   customerEmail: '',
   customerPhone: '',
+  menuId: null as number | null,
 })
+
+const hasMenus = computed(() => {
+    return currentTour.value?.menus && currentTour.value.menus.length > 0;
+});
+
+const pricePerPerson = computed(() => {
+    if (!currentTour.value) return 0;
+    if (form.value.menuId) {
+        const menu = currentTour.value.menus?.find(m => m.id === form.value.menuId);
+        return menu ? Number(menu.price) : currentTour.value.basePrice;
+    }
+    return currentTour.value.basePrice;
+});
 
 // Validation
 const isFormValid = computed(() => {
-  return (
+  const basicValid = (
     form.value.date &&
     form.value.time &&
     form.value.attendeesCount > 0 &&
     form.value.customerName.length > 2 &&
     form.value.customerEmail.includes('@')
-  )
+  );
+
+  if (hasMenus.value && !form.value.menuId) return false;
+
+  return basicValid;
 })
 
 const totalApprox = computed(() => {
    if (!currentTour.value) return 0
-   return currentTour.value.basePrice * form.value.attendeesCount
+   return pricePerPerson.value * form.value.attendeesCount
 })
 
 const minDate = computed(() => {
@@ -222,6 +272,7 @@ async function handleSubmit() {
        date: form.value.date,
        time: form.value.time,
        attendeesCount: form.value.attendeesCount,
+       menuId: form.value.menuId || undefined,
        customerName: form.value.customerName,
        customerEmail: form.value.customerEmail,
        customerPhone: form.value.customerPhone
@@ -249,6 +300,16 @@ onMounted(async () => {
    const tour = toursStore.getTourById(tourId)
    if (tour) {
      form.value.attendeesCount = tour.minAttendants
+   }
+
+   // Handle pre-selected menu from query params
+   const preSelectedMenuId = route.query.menuId
+   if (preSelectedMenuId) {
+      const menuIdNum = parseInt(preSelectedMenuId as string)
+      // Verify validity
+      if (tour?.menus?.some(m => m.id === menuIdNum)) {
+          form.value.menuId = menuIdNum
+      }
    }
 })
 </script>
