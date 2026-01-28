@@ -12,7 +12,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^14.1.0",
     "axios": "^1.13.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-vue": "^8.6.0",
     "jsonwebtoken": "^9.0.3",
     "pinia": "^3.0.3",
     "qrcode.vue": "^3.6.0",

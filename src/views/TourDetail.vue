@@ -64,40 +64,36 @@
                 <h2 class="text-2xl font-bold mb-4 text-gray-800">Acerca de esta experiencia</h2>
                 
                 <!-- Tour Images Carousel -->
-                <div v-if="tour.images && tour.images.length > 0" class="relative group w-full h-64 md:h-96 rounded-xl overflow-hidden mb-6 shadow-md">
-                    <!-- Main Image -->
-                    <div 
-                        class="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-in-out"
-                        :style="{ backgroundImage: `url(${tour.images[currentImageIndex].imageUrl})` }"
-                    ></div>
-                    
-                    <!-- Gradient Overlay -->
-                    <div class="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-60"></div>
-
-                    <!-- Navigation Arrows -->
-                    <button 
-                         v-if="tour.images.length > 1"
-                        @click.prevent="prevImage" 
-                        class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/80 text-white hover:text-indigo-900 rounded-full p-2 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                <div v-if="tour.images && tour.images.length > 0" class="w-full mb-8">
+                    <Carousel 
+                        class="w-full" 
+                        :opts="{ align: 'center', loop: true }"
+                        :plugins="[plugin]"
+                        @init-api="(val) => emblaApi = val"
                     >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button 
-                        v-if="tour.images.length > 1"
-                        @click.prevent="nextImage" 
-                        class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/80 text-white hover:text-indigo-900 rounded-full p-2 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-                    >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </button>
+                        <CarouselContent>
+                            <CarouselItem v-for="(img, index) in tour.images" :key="index">
+                                <div class="relative w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
+                                    <div 
+                                        class="w-full h-full bg-cover bg-center"
+                                        :style="{ backgroundImage: `url(${img.imageUrl})` }"
+                                    ></div>
+                                    <div class="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-60"></div>
+                                </div>
+                            </CarouselItem>
+                        </CarouselContent>
+                        <CarouselPrevious class="hidden md:flex left-4 bg-white/30 hover:bg-white/80 text-white hover:text-indigo-900 border-none" />
+                        <CarouselNext class="hidden md:flex right-4 bg-white/30 hover:bg-white/80 text-white hover:text-indigo-900 border-none" />
+                    </Carousel>
 
                     <!-- Indicators -->
-                    <div v-if="tour.images.length > 1" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                    <div v-if="tour.images.length > 1" class="flex justify-center gap-2 mt-4">
                         <button 
                             v-for="(_, index) in tour.images" 
                             :key="index"
-                            @click="currentImageIndex = index"
+                            @click="emblaApi?.scrollTo(index)"
                             class="w-2.5 h-2.5 rounded-full transition-colors"
-                            :class="currentImageIndex === index ? 'bg-white' : 'bg-white/40 hover:bg-white/60'"
+                            :class="currentImageIndex === index ? 'bg-indigo-900' : 'bg-gray-300 hover:bg-indigo-400'"
                         ></button>
                     </div>
                 </div>
@@ -168,11 +164,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToursStore } from '@/stores/tours'
 import { storeToRefs } from 'pinia'
 import Badge from '@/components/ui/Badge.vue'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi
+} from '@/components/ui/carousel'
+// @ts-ignore
+import Autoplay from 'embla-carousel-autoplay'
 
 const route = useRoute()
 const toursStore = useToursStore()
@@ -181,19 +187,21 @@ const { tours, loading } = storeToRefs(toursStore)
 const tourId = parseInt(route.params.id as string)
 const tour = computed(() => toursStore.getTourById(tourId))
 
+const emblaApi = ref<CarouselApi>()
 const currentImageIndex = ref(0)
 
-const nextImage = () => {
-  if (tour.value?.images?.length) {
-    currentImageIndex.value = (currentImageIndex.value + 1) % tour.value.images.length
-  }
-}
+const plugin = Autoplay({
+  delay: 4000,
+  stopOnInteraction: true,
+})
 
-const prevImage = () => {
-  if (tour.value?.images?.length) {
-    currentImageIndex.value = (currentImageIndex.value - 1 + tour.value.images.length) % tour.value.images.length
-  }
-}
+watch(emblaApi, (api) => {
+  if (!api) return
+  
+  api.on('select', () => {
+    currentImageIndex.value = api.selectedScrollSnap()
+  })
+})
 
 onMounted(async () => {
     if (tours.value.length === 0) {
