@@ -131,6 +131,17 @@
                 </div>
 
                 <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">RUT *</label>
+                  <input
+                    v-model="form.customerRut"
+                    type="text"
+                    required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="12.345.678-9"
+                  />
+                </div>
+
+                <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico *</label>
                   <input
                     v-model="form.customerEmail"
@@ -208,6 +219,7 @@ const form = ref({
   time: '',
   attendeesCount: 1,
   customerName: '',
+  customerRut: '',
   customerEmail: '',
   customerPhone: '',
   menuId: null as number | null,
@@ -233,6 +245,7 @@ const isFormValid = computed(() => {
     form.value.time &&
     form.value.attendeesCount > 0 &&
     form.value.customerName.length > 2 &&
+    form.value.customerRut.length > 6 &&
     form.value.customerEmail.includes('@')
   );
 
@@ -273,16 +286,22 @@ async function handleSubmit() {
        time: form.value.time,
        attendeesCount: form.value.attendeesCount,
        menuId: form.value.menuId || undefined,
+       customerRut: form.value.customerRut,
        customerName: form.value.customerName,
        customerEmail: form.value.customerEmail,
        customerPhone: form.value.customerPhone
      })
 
+     console.log('Order create response', response)
      if (response.paymentUrl && response.token) {
         // Redirection to VirtualPOS
         // The URL provided by the backend is the Web Checkout URL
         window.location.href = response.paymentUrl;
+        return;
      }
+
+     localError.value = 'No se recibió URL de pago. Intenta nuevamente.'
+     submitting.value = false
 
   } catch (err: any) {
      console.error(err)

@@ -53,6 +53,7 @@ export interface Order {
   orderNumber: string
   tourInstanceId: number
   customerName: string
+  customerRut: string
   customerEmail: string
   customerPhone?: string
   attendeesCount: number // Replaces ticket_quantity
@@ -83,6 +84,7 @@ export interface CreateOrderRequest {
   attendeesCount: number
   menuId?: number
   customerName: string
+  customerRut: string
   customerEmail: string
   customerPhone?: string
 }
@@ -100,6 +102,7 @@ export interface BookingFormData {
   date: string | null
   time: string | null
   attendeesCount: number
+  customerRut: string
   customerName: string
   customerEmail: string
   customerPhone: string
