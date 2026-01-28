@@ -15,11 +15,16 @@
         <div class="flex items-center gap-1">
           <!-- Simple icons usage or text if icons fail -->
           <span class="font-bold">⏱</span>
-          <span>{{ tour.durationMinutes }} min</span>
+          <span>
+            {{ Math.floor(tour.durationMinutes / 60) }}hrs
+            <template v-if="tour.durationMinutes % 60 !== 0">
+              {{ tour.durationMinutes % 60 }} min
+            </template>
+          </span>
         </div>
          <div class="flex items-center gap-1">
           <span class="font-bold">$</span>
-          <span>{{ tour.basePrice }}</span>
+          <span>{{ Math.floor(tour.basePrice) }}</span>
         </div>
       </div>
 

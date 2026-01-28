@@ -15,7 +15,7 @@
         </div>
         <div v-else>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <h1 class="text-3xl md:text-5xl font-bold">{{ tour.description }}</h1> <!-- Using description as Title -->
+                <h1 class="text-3xl md:text-5xl font-bold">{{ tour.name }}</h1> 
                 <Badge :variant="tour.tourType === 'Special' ? 'default' : 'secondary'" class="text-lg px-4 py-1">
                     {{ tour.tourType }}
                 </Badge>
@@ -106,7 +106,7 @@
 
             <!-- Menus Section (If Available) -->
             <div v-if="tour.menus && tour.menus.length > 0" class="py-8 border-t border-gray-100">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">Elige tu Menú</h2>
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Elige tu Desgustación</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div 
                         v-for="menu in tour.menus" 
