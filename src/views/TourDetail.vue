@@ -100,8 +100,24 @@
 
                 <p class="text-gray-600 leading-relaxed text-lg">{{ tour.description }}</p>
                 <div class="mt-4 p-4 bg-yellow-50 text-yellow-800 rounded-md inline-block">
-                    <span class="font-bold">Horario:</span> {{ tour.earliestHour.substring(0,5) }} - {{ tour.latestHour.substring(0,5) }}
+                    <span class="font-bold">Horarios de inicio:</span> {{ tour.earliestHour.substring(0,5) }} a {{ tour.latestHour.substring(0,5) }}
                 </div>
+            </div>
+
+            <!-- Tour Wines (If No Menus) -->
+            <div v-if="(!tour.menus || tour.menus.length === 0) && tour.wines && tour.wines.length > 0" class="py-8 border-t border-gray-100">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Vinos Incluidos</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     <div v-for="wine in tour.wines" :key="wine.id" class="border rounded-xl p-4 bg-white flex items-center gap-4 hover:shadow-md transition">
+                         <div class="bg-purple-50 p-3 rounded-full text-purple-600 shrink-0">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-900">{{ wine.name }}</h3>
+                            <p v-if="wine.varietal" class="text-sm text-gray-600">{{ wine.varietal }} <span v-if="wine.vintage" class="ml-1 text-gray-400">({{ wine.vintage }})</span></p>
+                        </div>
+                     </div>
+                 </div>
             </div>
 
             <!-- Menus Section (If Available) -->
@@ -116,7 +132,7 @@
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h3 class="font-bold text-xl text-gray-900">{{ menu.name }}</h3>
-                                <p class="text-green-700 font-bold text-lg mt-1">${{ menu.price }}</p>
+                                <p class="text-green-700 font-bold text-lg mt-1">${{ Math.floor(menu.price) }}</p>
                             </div>
                             <span v-if="menu.isActive" class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Disponible</span>
                         </div>
@@ -125,7 +141,7 @@
 
                         <!-- Included Wines Preview -->
                         <div v-if="menu.wines && menu.wines.length > 0" class="mb-6 bg-gray-50 p-3 rounded-lg">
-                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Vinos Incluidos</p>
+                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Vinos</p>
                              <ul class="space-y-1">
                                  <li v-for="wine in menu.wines" :key="wine.id" class="text-sm text-gray-700 flex items-center">
                                      <svg class="w-3 h-3 text-indigo-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
