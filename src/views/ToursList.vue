@@ -1,7 +1,7 @@
 <template>
   <div class="tours-list">
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-4xl font-bold mb-8">Tours de Vino</h1>
+      <h1 class="text-4xl font-bold mb-8">Enoturismo</h1>
 
       <div v-if="loading" class="text-center py-12">
         <p class="text-gray-600">Cargando tours...</p>

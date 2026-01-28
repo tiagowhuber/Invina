@@ -14,6 +14,7 @@ export interface TourImage {
 
 export interface Tour {
   id: number
+  name: string
   description: string
   durationMinutes: number
   minAttendants: number
