@@ -1,7 +1,7 @@
 <template>
   <div class="group relative flex flex-col h-full bg-white/50 hover:bg-white transition-colors duration-500 rounded-none border border-border/60 hover:border-primary/30">
     <!-- Image Area -->
-    <div class="aspect-[4/3] w-full overflow-hidden bg-secondary relative">
+    <div class="aspect-4/3 w-full overflow-hidden bg-secondary relative">
        <!-- Use a computed property or logic for image path if needed, assuming absolute or relative path works -->
        <img 
          v-if="tour.images && tour.images.length > 0" 

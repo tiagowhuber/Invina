@@ -12,14 +12,14 @@
               to="/" 
               class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
             >
-              Eventos
+              Enoturismo
             </router-link>
-            <router-link 
+            <!-- <router-link 
               to="/private" 
               class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
             >
               Privado
-            </router-link>
+            </router-link> -->
           </div>
 
           <!-- Logo -->

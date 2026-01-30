@@ -176,7 +176,7 @@
                                         <span class="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4 block">Maridaje & Vinos</span>
                                         <ul class="space-y-4">
                                             <li v-for="wine in selectedMenu.wines" :key="wine.id" class="group/wine flex items-baseline gap-3">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/wine:bg-primary transition-colors flex-shrink-0 translate-y-1"></span>
+                                                <span class="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/wine:bg-primary transition-colors shrink-0 translate-y-1"></span>
                                                 <div class="flex flex-col">
                                                     <span class="font-serif text-base text-foreground group-hover/wine:text-primary transition-colors leading-none">{{ wine.name }}</span>
                                                     <span v-if="wine.varietal" class="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mt-1">{{ wine.varietal }}</span>
