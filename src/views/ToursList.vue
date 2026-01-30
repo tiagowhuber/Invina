@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <div class="mb-8 md:mb-12 mt-4 text-center md:text-left border-b border-primary/20 pb-6">
         <!-- <span class="text-xs font-bold tracking-[0.3em] text-primary uppercase mb-4 block">Descubre Nuestra Esencia</span> -->
-        <h1 class="text-5xl md:text-7xl font-serif text-primary mb-6">Experiencias</h1>
+        <h1 class="text-5xl md:text-7xl font-serif text-primary mb-6 mt-6">Experiencias</h1>
         <p class="text-muted-foreground font-light text-lg max-w-2xl leading-relaxed">
           Sumérgete en el mundo de Invina. Desde catas íntimas hasta recorridos exclusivos por nuestros viñedos centenarios.
         </p>

@@ -38,7 +38,7 @@
             <span>{{ Math.floor(tour.durationMinutes / 60) }}H {{ tour.durationMinutes % 60 ? (tour.durationMinutes % 60) + 'M' : '' }}</span>
           </div>
           <div class="flex items-center gap-2">
-            <span>${{ tour.basePrice.toLocaleString() }}</span>
+            <span>${{ Math.floor(tour.basePrice).toLocaleString() }}</span>/ pp
           </div>
         </div>
         

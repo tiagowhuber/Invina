@@ -98,7 +98,7 @@
               <div class="lg:sticky lg:top-32 bg-secondary/30 border border-border p-8 md:p-12 backdrop-blur-sm">
                   <div class="flex justify-between items-baseline mb-8 border-b border-border pb-8">
                      <span class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Precio</span>
-                     <span class="text-3xl font-serif text-primary">${{ tour.basePrice.toLocaleString() }}</span>
+                     <span class="text-3xl font-serif text-primary">${{ Math.floor(tour.basePrice).toLocaleString() }}</span>
                   </div>
 
                   <div class="space-y-6 mb-12">
