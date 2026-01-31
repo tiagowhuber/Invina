@@ -60,7 +60,7 @@
                                         :class="[
                                             'px-4 py-2 text-sm transition-all border',
                                             form.time === timeStr
-                                            ? 'bg-primary border-primary text-primary-foreground'
+                                            ? 'bg-primary border-primary text-primary-foreground ring-2 ring-black ring-offset-1'
                                             : 'border-border hover:border-primary/50 text-muted-foreground'
                                         ]"
                                     >
@@ -194,7 +194,7 @@
                         </div>
                          <div class="flex justify-between border-b border-border/50 pb-4">
                             <span class="text-muted-foreground">Hora</span>
-                            <span class="font-medium">{{ form.time || '—' }}</span>
+                            <span class="font-medium">{{ form.time ? form.time.substring(0, 5) : '—' }}</span>
                         </div>
                         <div class="flex justify-between border-b border-border/50 pb-4">
                             <span class="text-muted-foreground">Invitados</span>

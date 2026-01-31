@@ -83,14 +83,35 @@
                   <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8">Selección de Vinos</h2>
                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       <div v-for="wine in tour.wines" :key="wine.id" class="flex items-start gap-4">
-                          <span class="text-2xl text-primary/40 font-serif italic">0{{ tour.wines.indexOf(wine) + 1}}</span>
+                          <template v-if="wine.imageUrl">
+                            <img
+                              :src="encodeURI(wine.imageUrl)"
+                              :alt="wine.name"
+                              class="w-28 h-28 rounded-md object-cover cursor-pointer hover:scale-105 transition-transform"
+                              @click="openWineImage(wine.imageUrl)"
+                              @error="(e) => (e.target as HTMLImageElement).src = '/images/wines/default.png'"
+                            />
+                          </template>
+                          <div v-else class="w-28 h-28 rounded-md bg-muted-foreground/10 flex items-center justify-center text-xs text-muted-foreground">
+                            Sin imagen
+                          </div>
+
                           <div>
                               <h3 class="font-serif text-lg text-foreground mb-1">{{ wine.name }}</h3>
                               <p class="text-sm text-muted-foreground uppercase tracking-wider">{{ wine.varietal }} {{ wine.vintage }}</p>
                           </div>
-                      </div>
+                      </div> 
                    </div>
                </div>
+
+               <!-- Lightbox modal for wine images -->
+               <transition name="fade">
+                 <div v-if="selectedWineImage" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70" @click.self="closeWineImage">
+                   <button @click="closeWineImage" class="absolute top-6 right-6 text-white text-2xl leading-none" aria-label="Cerrar imagen">×</button>
+                   <img :src="encodeURI(selectedWineImage)" :alt="'Detalle de vino'" class="max-w-full max-h-[80vh] rounded-md shadow-lg" />
+                 </div>
+               </transition>
+
           </div>
 
           <!-- Right Column: Booking Sidebar -->
@@ -148,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, watch } from 'vue'
+import { onMounted, onUnmounted, computed, ref, watch } from 'vue' 
 import { useRoute } from 'vue-router'
 import { useToursStore } from '@/stores/tours'
 import { storeToRefs } from 'pinia'
@@ -187,6 +208,21 @@ watch(emblaApi, (api) => {
   })
 })
 
+// Lightbox state & handlers
+const selectedWineImage = ref<string | null>(null)
+
+const openWineImage = (url: string) => {
+  selectedWineImage.value = url
+}
+
+const closeWineImage = () => {
+  selectedWineImage.value = null
+}
+
+const onKeyDown = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') closeWineImage()
+} 
+
 onMounted(async () => {
     if (tours.value.length === 0) {
         await toursStore.fetchTours()
@@ -196,6 +232,11 @@ onMounted(async () => {
         tour: tour.value,
         images: tour.value?.images
     })
+    window.addEventListener('keydown', onKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
 })
 
 watch(tour, (newTour) => {

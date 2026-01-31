@@ -1,5 +1,13 @@
 <template>
-  <div class="group relative flex flex-col h-full bg-white/50 hover:bg-white transition-colors duration-500 rounded-none border border-border/60 hover:border-primary/30">
+  <div
+    class="group relative flex flex-col h-full bg-white/50 hover:bg-white transition-colors duration-500 rounded-none border border-border/60 hover:border-primary/30 cursor-pointer"
+    role="link"
+    tabindex="0"
+    :aria-label="'Open ' + tour.name + ' details'"
+    @click="goToDetail"
+    @keydown.enter="goToDetail"
+    @keydown.space.prevent="goToDetail"
+  >
     <!-- Image Area -->
     <div class="aspect-4/3 w-full overflow-hidden bg-secondary relative">
        <!-- Use a computed property or logic for image path if needed, assuming absolute or relative path works -->
@@ -43,11 +51,12 @@
         </div>
         
         <router-link 
+          @click.stop
           :to="{ name: 'tour-detail', params: { id: tour.id }}"
           class="text-[10px] uppercase tracking-[0.2em] font-bold text-primary hover:text-foreground transition-colors flex items-center gap-2 group-hover:translate-x-1 duration-300"
         >
           Reservar <span>&rarr;</span>
-        </router-link>
+        </router-link> 
       </div>
     </div>
   </div>
@@ -55,8 +64,17 @@
 
 <script setup lang="ts">
 import type { Tour } from '@/types'
+import { toRef } from 'vue'
+import { useRouter } from 'vue-router'
 
-defineProps<{
+const props = defineProps<{
   tour: Tour
 }>()
+
+const tour = toRef(props, 'tour')
+
+const router = useRouter()
+const goToDetail = () => {
+  router.push({ name: 'tour-detail', params: { id: tour.value.id } })
+}
 </script>
