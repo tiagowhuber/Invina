@@ -19,7 +19,7 @@
                             alt=""
                             @error="(e) => console.error('Image load failed:', img.imageUrl, e)"
                         />
-                        <div class="absolute inset-0 bg-black/40"></div>
+                        <div class="absolute inset-0"></div>
                     </div>
                </CarouselItem>
            </CarouselContent>
@@ -35,9 +35,9 @@
              <!-- Title Section -->
             <div v-if="tour" class="max-w-4xl mb-12 pointer-events-auto">
                 <div class="flex items-center gap-4 mb-4">
-                  <span v-if="tour.tourType === 'Special'" class="bg-primary text-primary-foreground text-[10px] uppercase tracking-widest px-3 py-1 font-medium">
+                  <!-- <span v-if="tour.tourType === 'Special'" class="bg-primary text-primary-foreground text-[10px] uppercase tracking-widest px-3 py-1 font-medium">
                       Exclusivo
-                  </span>
+                  </span> -->
                 </div>
                 <h1 class="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight">{{ tour.name }}</h1>
                 
@@ -69,9 +69,18 @@
               <!-- Description -->
                <div>
                   <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8">La Experiencia</h2>
-                  <p class="text-xl leading-relaxed font-light text-foreground/90 font-serif">
-                    {{ tour.description }}
-                  </p>
+                  <div class="text-xl leading-relaxed font-light text-foreground/90 font-serif space-y-6">
+                    <template v-for="(block, beat) in parsedDescription" :key="beat">
+                      <p v-if="block.type === 'paragraph'">
+                        {{ block.content }}
+                      </p>
+                      <ul v-else-if="block.type === 'list'" class="list-disc pl-6 space-y-2 marker:text-primary/60">
+                        <li v-for="(item, i) in block.content" :key="i" class="pl-2">
+                          {{ item }}
+                        </li>
+                      </ul>
+                    </template>
+                  </div>
                    <div class="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
                       <span class="w-2 h-2 rounded-full bg-primary/40"></span>
                       <span>Horarios: {{ tour.earliestHour.substring(0,5) }} &mdash; {{ tour.latestHour.substring(0,5) }}</span>
@@ -174,6 +183,7 @@ import { useRoute } from 'vue-router'
 import { useToursStore } from '@/stores/tours'
 import { storeToRefs } from 'pinia'
 import Badge from '@/components/ui/Badge.vue'
+import { parseDescription } from '@/lib/utils'
 import {
   Carousel,
   CarouselContent,
@@ -191,6 +201,11 @@ const { tours, loading } = storeToRefs(toursStore)
 
 const tourId = parseInt(route.params.id as string)
 const tour = computed(() => toursStore.getTourById(tourId))
+
+const parsedDescription = computed(() => {
+  if (!tour.value?.description) return []
+  return parseDescription(tour.value.description)
+})
 
 const emblaApi = ref<CarouselApi>()
 const currentImageIndex = ref(0)

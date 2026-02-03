@@ -22,11 +22,11 @@
        </div>
        
        <!-- Badge -->
-       <div class="absolute top-0 right-0 p-4">
+       <!-- <div class="absolute top-0 right-0 p-4">
           <span v-if="tour.tourType === 'Special'" class="bg-primary text-primary-foreground text-[10px] uppercase tracking-widest px-3 py-1 font-medium shadow-sm">
             Exclusivo
           </span>
-       </div>
+       </div> -->
     </div>
 
     <!-- Content -->
