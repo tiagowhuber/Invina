@@ -33,7 +33,7 @@
               to="/orders/lookup" 
               class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
             >
-              Mis Pedidos
+              <!-- Mis Pedidos -->
             </router-link>
           </div>
         </nav>

@@ -119,7 +119,7 @@
               <div class="lg:sticky lg:top-32 bg-secondary/30 border border-border p-8 md:p-12 backdrop-blur-sm">
                   <div class="flex justify-between items-baseline mb-8 border-b border-border pb-8">
                      <span class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">Precio</span>
-                     <span class="text-3xl font-serif text-primary">${{ Math.floor(tour.basePrice).toLocaleString() }}</span>
+                     <span class="text-3xl font-serif text-primary">${{ Math.floor(tour.basePrice).toLocaleString() }}/pp</span>
                   </div>
 
                   <div class="space-y-6 mb-12">
@@ -145,7 +145,7 @@
                       >
                          <div class="flex justify-between items-center mb-2">
                              <h4 class="font-serif text-lg font-medium group-hover:text-primary transition-colors">{{ menu.name }}</h4>
-                             <span class="text-sm font-semibold">${{ Math.floor(menu.price).toLocaleString() }}</span>
+                             <span class="text-sm font-semibold">${{ Math.floor(menu.price).toLocaleString() }}/pp</span>
                          </div>
                          <p class="text-sm text-muted-foreground font-light mb-4">{{ menu.description || 'Degustación exclusiva.' }}</p>
                          <span class="text-[10px] uppercase tracking-widest font-bold text-primary group-hover:underline">Reservar &rarr;</span>
