@@ -28,7 +28,7 @@
 
         <div class="absolute inset-0 flex flex-col justify-between container mx-auto px-6 py-8 pointer-events-none">
             <!-- Back Link -->
-            <router-link :to="{ name: 'home' }" class="inline-flex items-center text-white/80 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] font-medium mt-20 pointer-events-auto w-fit">
+            <router-link :to="{ name: 'home' }" class="inline-flex items-center text-white/80 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] font-medium mt-20 pointer-events-auto w-fit bg-stone-600 rounded-full px-3 py-1">
               &larr; Volver
             </router-link>
 

@@ -289,9 +289,17 @@ const selectedMenu = computed(() => {
 })
 
 const minDate = computed(() => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return tomorrow.toISOString().split('T')[0]
+  if (!currentTour.value) {
+    const d = new Date() 
+    d.setDate(d.getDate() + 1) 
+    return d.toISOString().split('T')[0]
+  }
+  
+  // Anticipation logic
+  const now = new Date()
+  const daysToAdd = currentTour.value.tourType === 'Special' ? 3 : 1
+  now.setDate(now.getDate() + daysToAdd)
+  return now.toISOString().split('T')[0]
 })
 
 // Actions
