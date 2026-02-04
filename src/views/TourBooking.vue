@@ -201,7 +201,7 @@
                             <span class="font-medium">{{ form.attendeesCount }}</span>
                         </div>
                          <div class="flex justify-between items-center pt-4">
-                            <span class="font-serif text-lg">Total Estimado</span>
+                            <span class="font-serif text-lg">Total</span>
                             <span class="font-serif text-3xl text-primary">${{ totalApprox.toLocaleString() }}</span>
                         </div>
                     </div>
