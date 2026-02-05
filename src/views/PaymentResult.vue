@@ -34,7 +34,7 @@
            <span class="font-serif text-2xl text-primary">#{{ orderNumber }}</span>
         </div>
         
-        <router-link :to="{ name: 'home' }" class="inline-block w-full bg-primary text-primary-foreground py-4 text-xs uppercase tracking-[0.2em] font-bold hover:bg-stone-800 transition-colors">
+        <router-link :to="{ name: 'home' }" class="inline-block w-full bg-primary text-primary-foreground py-4 text-xs uppercase tracking-[0.2em] font-bold hover:bg-stone-300 transition-colors">
             Volver al Inicio
         </router-link>
       </div>
