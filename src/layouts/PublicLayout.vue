@@ -59,9 +59,8 @@
             </p>
           </div>
           <div class="flex gap-8 text-xs uppercase tracking-widest text-muted-foreground">
-            <a href="#" class="hover:text-primary transition-colors">Instagram</a>
-            <a href="#" class="hover:text-primary transition-colors">Contacto</a>
-            <a href="#" class="hover:text-primary transition-colors">Términos</a>
+            <a href="https://www.instagram.com/invina_cl/" class="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="#" class="hover:text-primary transition-colors">Contacto: +59757083058</a>
           </div>
         </div>
         <div class="text-center mt-12 text-[10px] text-muted-foreground uppercase tracking-wider">

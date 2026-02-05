@@ -36,14 +36,22 @@
                             <!-- Date -->
                             <div class="space-y-4">
                                 <label class="text-xs uppercase tracking-widest text-muted-foreground">Fecha</label>
-                                <input
-                                    v-model="form.date"
-                                    type="date"
-                                    :min="minDate"
-                                    required
-                                    class="w-full bg-transparent border-b border-border py-2 font-serif text-lg focus:outline-none focus:border-primary transition-colors"
-                                    @change="handleDateChange"
-                                />
+                                <div class="relative grid">
+                                    <span 
+                                        class="col-start-1 row-start-1 py-2 font-serif text-lg pointer-events-none truncate pr-8"
+                                        :class="form.date ? 'text-foreground' : 'text-muted-foreground/50'"
+                                    >
+                                        {{ formattedDate || 'dd/mm/yyyy' }}
+                                    </span>
+                                    <input
+                                        v-model="form.date"
+                                        type="date"
+                                        :min="minDate"
+                                        required
+                                        class="col-start-1 row-start-1 w-full bg-transparent border-b border-border py-2 font-serif text-lg focus:outline-none focus:border-primary transition-colors text-transparent z-10 cursor-pointer placeholder-transparent"
+                                        @change="handleDateChange"
+                                    />
+                                </div>
                             </div>
 
                             <!-- Time -->
@@ -190,7 +198,7 @@
                         </div>
                          <div class="flex justify-between border-b border-border/50 pb-4">
                             <span class="text-muted-foreground">Fecha</span>
-                            <span class="font-medium">{{ form.date || '—' }}</span>
+                            <span class="font-medium">{{ formattedDate || '—' }}</span>
                         </div>
                          <div class="flex justify-between border-b border-border/50 pb-4">
                             <span class="text-muted-foreground">Hora</span>
@@ -247,6 +255,12 @@ const form = ref({
   customerEmail: '',
   customerPhone: '',
   menuId: null as number | null,
+})
+
+const formattedDate = computed(() => {
+  if (!form.value.date) return ''
+  const [year, month, day] = form.value.date.split('-')
+  return `${day}/${month}/${year}`
 })
 
 const hasMenus = computed(() => {
