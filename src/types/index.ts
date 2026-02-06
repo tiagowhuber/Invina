@@ -28,6 +28,7 @@ export interface Tour {
   wines?: Wine[]
   images?: TourImage[]
   menus?: Menu[]
+  additionals?: Additional[]
 }
 
 export interface Menu {
@@ -38,6 +39,15 @@ export interface Menu {
   price: number;
   isActive: boolean;
   wines?: Wine[];
+}
+
+export interface Additional {
+  id: number;
+  tourId: number;
+  name: string;
+  description?: string;
+  price: number;
+  isActive: boolean;
 }
 
 export interface Wine {
@@ -83,6 +93,7 @@ export interface CreateOrderRequest {
   date: string // YYYY-MM-DD
   time: string // HH:mm:ss
   attendeesCount: number
+  additionalIds?: number[]
   menuId?: number
   customerName: string
   customerRut: string

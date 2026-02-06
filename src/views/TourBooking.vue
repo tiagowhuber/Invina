@@ -79,9 +79,32 @@
                         </div>
                     </section>
 
-                    <!-- Step 2: Details -->
+                    <!-- Step 2: Additionals (Optional) -->
+                    <section v-if="availableAdditionals.length > 0" class="space-y-8">
+                         <h3 class="text-xl font-serif border-b border-border pb-4">02. Complementos</h3>
+                         <div class="space-y-4">
+                             <div v-for="add in availableAdditionals" :key="add.id" class="flex items-start space-x-4 border border-border p-4 hover:border-primary/50 transition-colors">
+                                 <input 
+                                    type="checkbox" 
+                                    :id="`add-${add.id}`"
+                                    :value="add.id"
+                                    v-model="form.additionalIds"
+                                    class="mt-1 w-5 h-5 text-primary border-border focus:ring-primary rounded cursor-pointer accent-primary"
+                                 />
+                                 <label :for="`add-${add.id}`" class="flex-1 cursor-pointer select-none">
+                                     <div class="flex justify-between items-baseline">
+                                         <span class="font-serif font-medium text-foreground">{{ add.name }}</span>
+                                         <span class="text-sm font-semibold text-primary">+${{ Number(add.price).toLocaleString() }}</span>
+                                     </div>
+                                     <p class="text-sm text-muted-foreground mt-1">{{ add.description }}</p>
+                                 </label>
+                             </div>
+                         </div>
+                    </section>
+
+                    <!-- Step 3: Details -->
                     <section class="space-y-8">
-                         <h3 class="text-xl font-serif border-b border-border pb-4">02. Datos de Cliente</h3>
+                         <h3 class="text-xl font-serif border-b border-border pb-4">03. Datos de Cliente</h3>
                          
                          <!-- Attendees -->
                         <div class="space-y-4">
@@ -208,6 +231,17 @@
                             <span class="text-muted-foreground">Invitados</span>
                             <span class="font-medium">{{ form.attendeesCount }}</span>
                         </div>
+
+                        <div v-if="selectedAdditionals.length > 0" class="border-b border-border/50 pb-4">
+                             <span class="block text-muted-foreground mb-2">Complementos</span>
+                             <ul class="space-y-2">
+                                 <li v-for="add in selectedAdditionals" :key="add.id" class="flex justify-between text-sm">
+                                     <span class="text-foreground/80">{{ add.name }}</span>
+                                     <span class="font-medium">+${{ Number(add.price).toLocaleString() }}</span>
+                                 </li>
+                             </ul>
+                        </div>
+
                          <div class="flex justify-between items-center pt-4">
                             <span class="font-serif text-lg">Total</span>
                             <span class="font-serif text-3xl text-primary">${{ totalApprox.toLocaleString() }}</span>
@@ -255,6 +289,11 @@ const form = ref({
   customerEmail: '',
   customerPhone: '',
   menuId: null as number | null,
+  additionalIds: [] as number[],
+})
+
+const availableAdditionals = computed(() => {
+    return currentTour.value?.additionals?.filter(a => a.isActive) || []
 })
 
 const formattedDate = computed(() => {
@@ -294,12 +333,26 @@ const isFormValid = computed(() => {
 
 const totalApprox = computed(() => {
    if (!currentTour.value) return 0
-   return pricePerPerson.value * form.value.attendeesCount
+   let total = pricePerPerson.value * form.value.attendeesCount
+   
+   // Add additionals
+   if (form.value.additionalIds && form.value.additionalIds.length > 0) {
+       const adds = currentTour.value.additionals?.filter(a => form.value.additionalIds.includes(a.id))
+       if (adds) {
+           total += adds.reduce((sum, a) => sum + Number(a.price), 0)
+       }
+   }
+   return total
 })
 
 const selectedMenu = computed(() => {
     if (!currentTour.value || !form.value.menuId) return null;
     return currentTour.value.menus?.find(m => m.id === form.value.menuId);
+})
+
+const selectedAdditionals = computed(() => {
+    if (!currentTour.value || !form.value.additionalIds.length) return [];
+    return currentTour.value.additionals?.filter(a => form.value.additionalIds.includes(a.id)) || [];
 })
 
 const minDate = computed(() => {
@@ -337,6 +390,7 @@ async function handleSubmit() {
        time: form.value.time,
        attendeesCount: form.value.attendeesCount,
        menuId: form.value.menuId || undefined,
+       additionalIds: form.value.additionalIds,
        customerRut: form.value.customerRut,
        customerName: form.value.customerName,
        customerEmail: form.value.customerEmail,
