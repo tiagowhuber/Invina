@@ -35,7 +35,9 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Date -->
                             <div class="space-y-4">
-                                <label class="text-xs uppercase tracking-widest text-muted-foreground">Fecha</label>
+                                <label class="text-xs uppercase tracking-widest text-muted-foreground">
+                                    Fecha <span v-if="currentTour?.tourType === 'Standard'" class="text-[10px] normal-case tracking-normal">(Lun-Sáb)</span>
+                                </label>
                                 <div class="relative grid">
                                     <span 
                                         class="col-start-1 row-start-1 py-2 font-serif text-lg pointer-events-none truncate pr-8"
@@ -229,7 +231,12 @@
                         </div>
                         <div class="flex justify-between border-b border-border/50 pb-4">
                             <span class="text-muted-foreground">Invitados</span>
-                            <span class="font-medium">{{ form.attendeesCount }}</span>
+                            <div class="text-right">
+                                <span class="font-medium block">{{ form.attendeesCount }}</span>
+                                <span v-if="form.attendeesCount >= DISCOUNT_THRESHOLD" class="text-xs text-primary font-medium">
+                                    ¡{{ DISCOUNT_RATE * 100 }}% Dcto aplicado!
+                                </span>
+                            </div>
                         </div>
 
                         <div v-if="selectedAdditionals.length > 0" class="border-b border-border/50 pb-4">
@@ -248,9 +255,18 @@
                         </div>
                     </div>
 
+                    <div v-if="validationError" class="mt-8 p-4 bg-destructive/5 border-l-2 border-destructive animate-in fade-in slide-in-from-bottom-1 duration-300">
+                        <div class="flex gap-3">
+                            <span class="text-destructive text-lg">!</span>
+                            <p class="text-sm font-medium text-destructive/90 leading-relaxed self-center">
+                                {{ validationError }}
+                            </p>
+                        </div>
+                    </div>
+
                     <button
                         @click="handleSubmit"
-                        :disabled="!isFormValid || submitting"
+                        :disabled="submitting"
                         class="w-full mt-12 bg-primary text-primary-foreground py-4 text-xs uppercase tracking-[0.2em] font-bold hover:bg-stone-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {{ submitting ? 'Procesando...' : 'Confirmar Reserva' }}
@@ -278,6 +294,7 @@ const tourId = parseInt(route.params.id as string)
 
 const submitting = ref(false)
 const localError = ref<string | null>(null)
+const validationError = ref<string | null>(null)
 const isMenuExpanded = ref(false)
 
 const form = ref({
@@ -331,10 +348,21 @@ const isFormValid = computed(() => {
   return basicValid;
 })
 
+const DISCOUNT_THRESHOLD = 5
+const DISCOUNT_RATE = 0.10
+
 const totalApprox = computed(() => {
    if (!currentTour.value) return 0
-   let total = pricePerPerson.value * form.value.attendeesCount
    
+   let ticketsTotal = pricePerPerson.value * form.value.attendeesCount
+   
+   // Apply discount for larger groups (mirrors backend logic)
+   if (form.value.attendeesCount >= DISCOUNT_THRESHOLD) {
+       ticketsTotal = ticketsTotal * (1 - DISCOUNT_RATE)
+   }
+   
+   let total = ticketsTotal
+
    // Add additionals
    if (form.value.additionalIds && form.value.additionalIds.length > 0) {
        const adds = currentTour.value.additionals?.filter(a => form.value.additionalIds.includes(a.id))
@@ -342,7 +370,7 @@ const totalApprox = computed(() => {
            total += adds.reduce((sum, a) => sum + Number(a.price), 0)
        }
    }
-   return total
+   return Math.round(total)
 })
 
 const selectedMenu = computed(() => {
@@ -371,14 +399,43 @@ const minDate = computed(() => {
 
 // Actions
 async function handleDateChange() {
+  validationError.value = null
+  
   if (form.value.date && tourId) {
+    // Validate Sundays for Standard tours
+    if (currentTour.value?.tourType === 'Standard') {
+        const [y, m, d] = form.value.date.split('-').map(Number)
+        const dateObj = new Date(y, m - 1, d)
+        
+        if (dateObj.getDay() === 0) { // Sunday
+            form.value.date = ''
+            validationError.value = 'Las visitas estándar están disponibles solo de Lunes a Sábado.'
+            return
+        }
+    }
+
     form.value.time = ''
     await toursStore.fetchSlots(tourId, form.value.date)
   }
 }
 
 async function handleSubmit() {
-  if (!isFormValid.value || !currentTour.value) return
+  validationError.value = null
+  
+  if (!isFormValid.value) {
+      // Granular validation messages
+      if (!form.value.date) validationError.value = 'Por favor, selecciona una fecha para tu visita.'
+      else if (!form.value.time) validationError.value = 'Debes seleccionar un horario disponible.'
+      else if (hasMenus.value && !form.value.menuId) validationError.value = 'Esta experiencia requiere seleccionar un menú.'
+      else if (form.value.attendeesCount < 1) validationError.value = 'El número de invitados debe ser al menos 1.'
+      else if (!form.value.customerName || form.value.customerName.length <= 2) validationError.value = 'Por favor ingresa tu nombre completo.'
+      else if (!form.value.customerRut || form.value.customerRut.length <= 6) validationError.value = 'Ingresa un RUT válido para la facturación.'
+      else if (!form.value.customerEmail || !form.value.customerEmail.includes('@')) validationError.value = 'Necesitamos un email válido para enviarte la confirmación.'
+      else validationError.value = 'Por favor completa todos los campos requeridos.'
+      return
+  }
+
+  if (!currentTour.value) return
   
   submitting.value = true
   localError.value = null
@@ -410,7 +467,17 @@ async function handleSubmit() {
 
   } catch (err: any) {
      console.error(err)
-     localError.value = err.response?.data?.error || 'Error al iniciar la reserva.'
+     
+     // Handle structured API errors
+     if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+         // Join multiple errors or take the first one
+         validationError.value = err.response.data.errors.map((e: any) => e.msg).join('. ')
+     } else if (err.response?.data?.error) {
+         validationError.value = err.response.data.error
+     } else {
+         validationError.value = 'Ocurrió un error al procesar tu reserva. Por favor intenta nuevamente.'
+     }
+     
      submitting.value = false
   }
 }
