@@ -1,116 +1,165 @@
-# Invina - Event Ticketing Platform Frontend
+# Invina Frontend
 
-A modern, mobile-first event ticketing platform built with Vue 3, TypeScript, Tailwind CSS, and shadcn-vue components.
+Vue 3 frontend for a wine tour booking system. Handles the booking flow from tour selection through WebPay payment and ticket generation. Built for a Chilean winery offering guided tours with wine pairings.
 
-## 🚀 Features
+## What This Does
 
-### Public Features
-- **Event Browsing**: Browse available events with real-time capacity information
-- **Event Details**: View detailed event information with availability
-- **Shopping Cart**: Add multiple tickets to cart with attendee name customization
-- **Checkout**: Secure checkout process with customer information
-- **WebPay Integration**: Full payment flow with WebPay Plus (Chilean payment gateway)
-- **Order Management**: 
-  - Track orders by order number or email
-  - 15-minute order expiration countdown for pending payments
-  - QR code generation for confirmed tickets
-- **Ticket Validation**: View ticket details with QR codes for venue entry
+Wine tour operators need online booking with real payment processing, not just contact forms. This handles the full customer journey: browse available tour dates, book tickets with seat reservations, pay via WebPay Plus (Chile's standard gateway), and receive QR-coded tickets. Also includes basic admin tools for managing tours and validating tickets at the door.
 
-### Admin Features (Password: `admin123`)
-- **Event Management**: Full CRUD operations for events
-- **Orders Dashboard**: View all orders with status tracking and revenue metrics
-- **Ticket Validation**: Scan and validate tickets at venue entry
-- **Statistics & Reports**: 
-  - Payment statistics (approved, pending, rejected, total revenue)
-  - Event-specific statistics (tickets sold, capacity, revenue)
-  - Ticket status breakdown
+## Architecture
 
-## 🛠️ Tech Stack
+Standard SPA talking to a REST backend. State management via Pinia stores for tours, shopping cart, and payment flows. The payment flow redirects to WebPay's hosted page and handles the callback on return. Orders expire after 15 minutes if unpaid. QR codes are generated client-side from confirmed ticket numbers.
 
-- **Vue 3** - Progressive JavaScript framework
-- **TypeScript** - Type-safe development
-- **Vite** - Next-generation frontend tooling
-- **Vue Router** - Official routing library
-- **Pinia** - State management
-- **Tailwind CSS** - Utility-first CSS framework
-- **shadcn-vue** - Re-usable component library
-- **Axios** - HTTP client
-- **qrcode.vue** - QR code generation
+Uses shadcn-vue components on top of Tailwind for the UI. Not trying to reinvent standard patterns here.
 
-## 📦 Installation
+## Dependencies
+
+- Backend: `Invina-ts-api` (must be running on localhost:3000 or configured URL)
+- Payment: WebPay Plus integration (via backend)
+- Email: Resend (backend sends confirmations)
+
+## Stack
+
+- Vue 3 (Composition API)
+- TypeScript
+- Vite
+- Vue Router
+- Pinia
+- Tailwind CSS + shadcn-vue components
+- Axios
+- qrcode.vue
+
+## Local Setup
+
+Prerequisites:
+- Node.js 18+
+- Backend API running at `http://localhost:3000` (see Invina-ts-api)
 
 ```bash
-# Install dependencies
 npm install
 
-# Create .env file with backend API URL
+# Create .env
 echo "VITE_API_BASE_URL=http://localhost:3000/api" > .env
 
-# Start development server
 npm run dev
-
-# Build for production
-npm run build
+# Opens at http://localhost:5173
 ```
 
-## 🌐 Environment Variables
+For production build:
+```bash
+npm run build  # Outputs to dist/
+```
 
-Create a `.env` file in the root directory:
+## Environment
 
 ```env
 VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
-## 🎯 Key Features
+That's it. One variable.
 
-### Mobile-First Design
-All pages are built with Tailwind's mobile-first approach, ensuring excellent UX on all devices.
+## How It Works
 
-### Order Expiration
-Orders have a 15-minute expiration window. The countdown timer is displayed on pending orders.
+**Customer Flow:**
+1. Browse tours, see available dates with real capacity counts
+2. Add tickets to cart (multiple tour dates supported)
+3. Enter customer info and attendee names at checkout
+4. Create order (status: `pending`, 15-min expiration timer starts)
+5. Redirect to WebPay hosted payment page
+6. WebPay redirects back with transaction result
+7. Backend updates order to `paid`, tickets become `confirmed` with QR codes
 
-### QR Code Integration
-Confirmed tickets display QR codes that can be scanned at venue entry for validation.
+**Admin:**
+- Password-protected pages (session storage, password: `admin123`)
+- Create/edit/delete tours with date-specific pricing
+- View orders with payment status filtering
+- Scan QR codes to validate tickets
+- Basic revenue stats per tour
 
-### Admin Authentication
-Simple password-based authentication (password: `admin123`) with session storage.
+The 15-minute expiration keeps held seats from blocking availability. Orders auto-expire via backend job.
 
-### WebPay Payment Flow
-1. User creates order → Status: `pending`
-2. System initiates WebPay transaction
-3. User redirects to WebPay external page
-4. After payment, WebPay redirects back
-5. Order status updates to `paid`, tickets become `confirmed`
+Mobile-first styling because most bookings happen on phones.
 
-## 🔗 API Integration
+## Project Layout
 
-The frontend integrates with the backend API at `http://localhost:3000/api`
+```
+src/
+  views/          - Page components
+  components/ui/  - shadcn-vue components
+  stores/         - Pinia stores (tours, bookings, payment)
+  services/api/   - Axios client wrappers
+  router/         - Route definitions
+  layouts/        - PublicLayout, AdminLayout wrappers
+  types/          - TypeScript interfaces
+public/images/    - Tour and wine images
+```
 
-## 🔐 Admin Access
+Key files:
+- [src/stores/tours.ts](src/stores/tours.ts) - Tour data fetching and caching
+- [src/stores/bookings.ts](src/stores/bookings.ts) - Shopping cart state
+- [src/stores/payment.ts](src/stores/payment.ts) - WebPay flow orchestration
+- [src/router/index.ts](src/router/index.ts) - Routes and auth guard for admin
 
-Navigate to `/admin/login` and use password `admin123` to access:
-- Event management
-- Orders dashboard
-- Ticket validation
-- Statistics
+## Deployment
 
-## 📝 Routes
+Configured for Netlify with SPA redirects (`public/_redirects`).
 
-**Public Routes:**
-- `/` - Events list
-- `/events/:id` - Event detail
-- `/checkout` - Checkout
-- `/payment` - Payment redirect
-- `/orders/:orderNumber` - Order confirmation
-- `/orders/lookup` - Order lookup
-- `/tickets/:ticketNumber` - Ticket detail
+Build settings:
+- Command: `npm run build`
+- Directory: `dist`
+- Env: `VITE_API_BASE_URL=<production-api-url>`
 
-**Admin Routes:**
-- `/admin` - Event management
-- `/admin/orders` - Orders dashboard
-- `/admin/validate` - Ticket validation
-- `/admin/statistics` - Statistics
+WebPay callbacks need the production domain whitelisted in Transbank's dashboard.
 
-## 📄 License
+## Routes
 
-Copyright © 2025 Invina
+**Public:**
+- `/` - Tour listing
+- `/events/:id` - Tour detail + booking form
+- `/checkout` - Cart and customer info
+- `/payment` - WebPay redirect handler
+- `/orders/:orderNumber` - Order status with tickets
+- `/orders/lookup` - Find order by email
+- `/tickets/:ticketNumber` - Individual ticket QR
+
+**Admin** (require password auth):
+- `/admin` - Tour CRUD
+- `/admin/orders` - Order dashboard
+- `/admin/validate` - QR scanner
+- `/admin/statistics` - Revenue stats
+
+## Common Issues
+
+**API Connection Fails:**  
+Backend isn't running or wrong URL in `.env`. Check `http://localhost:3000/api/tours` returns data.
+
+**Orders Not Expiring:**  
+Backend expiration job isn't running. Timer is UI-only; actual expiration happens server-side.
+
+**Admin Won't Login:**  
+Clear localStorage/sessionStorage. Password is literally `admin123` (yes, hardcoded).
+
+**Missing Tour Images:**  
+Images must exist at `public/images/tours/{tourSlug}/` with correct filenames referenced in tour data.
+
+**Build Type Errors:**  
+Run `npm run type-check`. Usually means types in `src/types/index.ts` don't match backend API response structure.
+
+## Known Limitations
+
+- Admin auth unfinished.
+- No actual QR scanning implementation on admin side—just displays codes. Would need camera access + library.
+- Order expiration countdown continues even after backend expires the order. Should poll status.
+- No retry logic on failed API calls. Network blips just error out.
+- Images are served from `public/` instead of CDN. Slow on poor connections.
+- No loading skeletons, just spinners. Could be better.
+- TypeScript is strict but not exhaustive—some `any` types remain in payment flow.
+- Mobile layout works but wasn't tested extensively on tablets.
+
+## License
+
+Copyright © 2026 Invina
+
+---
+
+Last updated: February 2026
