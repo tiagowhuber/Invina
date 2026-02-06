@@ -145,9 +145,9 @@
                   <!-- Menus/Options -->
                   <div v-if="tour.menus && tour.menus.length > 0" class="space-y-6">
                       <p class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Elige tu desgustación</p>
-                      
+
                       <div 
-                        v-for="menu in tour.menus" 
+                        v-for="menu in tour.menus.slice().sort((a, b) => a.price - b.price)" 
                         :key="menu.id" 
                         class="group border border-border p-6 hover:border-primary/50 transition-colors bg-white hover:bg-stone-50 cursor-pointer"
                         @click="$router.push({ name: 'tour-booking', params: { id: tour.id }, query: { menuId: menu.id }})"

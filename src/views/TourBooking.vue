@@ -181,7 +181,7 @@
                                     </p>
                                     
                                     <div v-if="selectedMenu.wines && selectedMenu.wines.length > 0">
-                                        <span class="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4 block">Maridaje & Vinos</span>
+                                        <span class="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4 block">Elegir 4 en tu visita</span>
                                         <ul class="space-y-4">
                                             <li v-for="wine in selectedMenu.wines" :key="wine.id" class="group/wine flex items-baseline gap-3">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover/wine:bg-primary transition-colors shrink-0 translate-y-1"></span>
