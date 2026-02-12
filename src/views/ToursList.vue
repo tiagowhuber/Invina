@@ -22,13 +22,13 @@
       <div v-else>
          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             <TourCard
-              v-for="tour in activeTours"
+              v-for="tour in sortedTours"
               :key="tour.id"
               :tour="tour"
             />
          </div>
 
-        <div v-if="activeTours.length === 0" class="text-center py-24 border border-dashed border-border mt-12">
+        <div v-if="sortedTours.length === 0" class="text-center py-24 border border-dashed border-border mt-12">
           <p class="text-muted-foreground font-serif italic text-xl">No hay experiencias disponibles en este momento.</p>
         </div>
       </div>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useToursStore } from '@/stores/tours'
 import TourCard from '@/components/TourCard.vue'
@@ -45,6 +45,15 @@ import TourCard from '@/components/TourCard.vue'
 const toursStore = useToursStore()
 
 const { loading, error, activeTours, toursByType } = storeToRefs(toursStore)
+
+// Temporary hotfix: Show fixed schedule tours first
+const sortedTours = computed(() => {
+  return [...activeTours.value].sort((a, b) => {
+    if (a.fixedSchedule && !b.fixedSchedule) return -1
+    if (!a.fixedSchedule && b.fixedSchedule) return 1
+    return 0
+  })
+})
 
 onMounted(() => {
   toursStore.fetchTours()

@@ -134,7 +134,7 @@
                   <div class="space-y-6 mb-12">
                       <div class="flex justify-between">
                          <span class="text-sm uppercase tracking-wider text-muted-foreground">Duración</span>
-                         <span class="font-medium">{{ Math.floor(tour.durationMinutes / 60) }} horas<span v-if="tour.durationMinutes % 60 !== 0"> {{ tour.durationMinutes % 60 }} minutos</span></span>
+                         <span class="font-medium">{{ Math.floor(tour.durationMinutes / 60) }} horas <span v-if="tour.durationMinutes % 60 !== 0"> {{ tour.durationMinutes % 60 }} minutos</span></span>
                       </div>
                        <div class="flex justify-between">
                          <span class="text-sm uppercase tracking-wider text-muted-foreground">Capacidad</span>
