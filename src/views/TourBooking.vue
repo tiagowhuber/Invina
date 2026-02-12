@@ -101,7 +101,7 @@
                                         v-for="timeStr in currentSlots"
                                         :key="timeStr"
                                         type="button"
-                                        @click="form.time = timeStr"
+                                        @click="selectTimeSlot(timeStr)"
                                         :class="[
                                             'px-4 py-2 text-sm transition-all border',
                                             form.time === timeStr
@@ -117,7 +117,7 @@
                     </section>
 
                     <!-- Step 2: Additionals (Optional) -->
-                    <section v-if="availableAdditionals.length > 0" class="space-y-8">
+                    <section ref="additionalsSection" v-if="availableAdditionals.length > 0" class="space-y-8">
                          <h3 class="text-xl font-serif border-b border-border pb-4">02. Complementos</h3>
                          <div class="space-y-4">
                              <div v-for="add in availableAdditionals" :key="add.id" class="flex items-start space-x-4 border border-border p-4 hover:border-primary/50 transition-colors">
@@ -140,7 +140,7 @@
                     </section>
 
                     <!-- Step 3: Details -->
-                    <section class="space-y-8">
+                    <section ref="detailsSection" class="space-y-8">
                          <h3 class="text-xl font-serif border-b border-border pb-4">03. Datos de Cliente</h3>
                          
                          <!-- Attendees -->
@@ -337,6 +337,8 @@ const submitting = ref(false)
 const localError = ref<string | null>(null)
 const validationError = ref<string | null>(null)
 const isMenuExpanded = ref(false)
+const additionalsSection = ref<HTMLElement | null>(null)
+const detailsSection = ref<HTMLElement | null>(null)
 
 const form = ref({
   date: '',
@@ -442,6 +444,38 @@ function selectInstance(instance: any) {
     form.value.date = instance.instanceDate
     form.value.time = instance.startTime
     // Visual feedback handled by class binding
+    
+    // Auto-scroll to additionals if available, otherwise to details section
+    setTimeout(() => {
+        const targetSection = availableAdditionals.value.length > 0 ? additionalsSection.value : detailsSection.value
+        if (targetSection) {
+            const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset
+            const offsetPosition = elementPosition - 100 // Offset for navbar
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            })
+        }
+    }, 100)
+}
+
+function selectTimeSlot(timeStr: string) {
+    form.value.time = timeStr
+    
+    // Auto-scroll to additionals if available, otherwise to details section
+    setTimeout(() => {
+        const targetSection = availableAdditionals.value.length > 0 ? additionalsSection.value : detailsSection.value
+        if (targetSection) {
+            const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset
+            const offsetPosition = elementPosition - 100 // Offset for navbar
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            })
+        }
+    }, 100)
 }
 
 // Actions
