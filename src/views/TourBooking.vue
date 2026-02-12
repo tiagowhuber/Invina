@@ -32,7 +32,42 @@
                     <section class="space-y-8">
                         <h3 class="text-xl font-serif border-b border-border pb-4">01. Fecha y Hora</h3>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Fixed Schedule View -->
+                        <div v-if="currentTour.fixedSchedule" class="space-y-4">
+                            <label class="text-xs uppercase tracking-widest text-muted-foreground">Próximas Fechas Disponibles</label>
+                            
+                            <div v-if="loading && fixedInstances.length === 0" class="text-sm italic text-muted-foreground animate-pulse">Cargando fechas...</div>
+                            <div v-else-if="fixedInstances.length === 0" class="text-sm text-destructive">No hay fechas programadas próximamente.</div>
+                            
+                            <div v-else class="grid grid-cols-1 gap-4">
+                                <button
+                                    v-for="instance in fixedInstances"
+                                    :key="instance.id"
+                                    type="button"
+                                    @click="selectInstance(instance)"
+                                    :class="[
+                                        'flex flex-col md:flex-row justify-between items-center p-4 border transition-all text-left group',
+                                        (form.date === instance.instanceDate && form.time === instance.startTime)
+                                        ? 'bg-primary border-primary text-primary-foreground ring-2 ring-black ring-offset-1' 
+                                        : 'border-border hover:border-primary/50 text-foreground hover:bg-black/5'
+                                    ]"
+                                >
+                                    <div class="flex flex-col">
+                                        <span class="font-serif text-lg">{{ formatDateStr(instance.instanceDate) }}</span>
+                                        <span class="text-sm opacity-80">{{ instance.startTime.substring(0, 5) }} hrs</span>
+                                    </div>
+                                    <div class="mt-2 md:mt-0 md:text-right">
+                                        <span class="text-xs uppercase tracking-wider opacity-70 block mb-1">Cupos</span>
+                                        <span :class="{'text-destructive font-bold': (currentTour.maxAttendants - instance.currentAttendants) < 5}">
+                                            {{ currentTour.maxAttendants - instance.currentAttendants }} disp.
+                                        </span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Flexible Date Picker View -->
+                        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Date -->
                             <div class="space-y-4">
                                 <label class="text-xs uppercase tracking-widest text-muted-foreground">
@@ -284,11 +319,17 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToursStore } from '@/stores/tours'
 import { storeToRefs } from 'pinia'
+function formatDateStr(dateStr: string) {
+    if (!dateStr) return ''
+    const [year, month, day] = dateStr.split('-')
+    return `${day}/${month}/${year}`
+}
+
 import { ordersApi } from '@/services/api' 
 
 const route = useRoute()
 const toursStore = useToursStore()
-const { currentTour, currentSlots, loading } = storeToRefs(toursStore)
+const { currentTour, currentSlots, fixedInstances, loading } = storeToRefs(toursStore)
 
 const tourId = parseInt(route.params.id as string)
 
@@ -397,6 +438,12 @@ const minDate = computed(() => {
   return now.toISOString().split('T')[0]
 })
 
+function selectInstance(instance: any) {
+    form.value.date = instance.instanceDate
+    form.value.time = instance.startTime
+    // Visual feedback handled by class binding
+}
+
 // Actions
 async function handleDateChange() {
   validationError.value = null
@@ -489,8 +536,13 @@ onMounted(async () => {
       await toursStore.fetchTours()
    }
    const tour = toursStore.getTourById(tourId)
+   
    if (tour) {
      form.value.attendeesCount = tour.minAttendants
+     
+     if (tour.fixedSchedule) {
+         await toursStore.fetchFixedInstances(tour.id)
+     }
    }
 
    // Handle pre-selected menu from query params

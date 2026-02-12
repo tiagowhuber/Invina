@@ -21,6 +21,7 @@ export interface Tour {
   maxAttendants: number
   basePrice: number // Changed from snake_case
   tourType: TourType
+  fixedSchedule: boolean
   earliestHour: string
   latestHour: string
   bufferMinutes: number

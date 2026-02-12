@@ -21,6 +21,11 @@ export const toursApi = {
       params: { tourId, date }
     })
     return data
+  },
+
+  getInstances: async (tourId: number) => {
+    const { data } = await apiClient.get<any[]>('/tours/' + tourId + '/instances') // Need proper typing for instance
+    return data
   }
 }
 

@@ -7,6 +7,7 @@ export const useToursStore = defineStore('tours', () => {
   const tours = ref<Tour[]>([])
   const currentTour = ref<Tour | null>(null)
   const currentSlots = ref<string[]>([]) // Changed from AvailabilityResponse
+  const fixedInstances = ref<any[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -60,6 +61,20 @@ export const useToursStore = defineStore('tours', () => {
     currentSlots.value = []
   }
 
+  async function fetchFixedInstances(tourId: number) {
+      loading.value = true
+      error.value = null
+      try {
+          const instances = await toursApi.getInstances(tourId)
+          fixedInstances.value = instances
+      } catch (err: any) {
+          error.value = err.response?.data?.error || 'Error fetching instances'
+          fixedInstances.value = []
+      } finally {
+          loading.value = false
+      }
+  }
+
   return {
     tours,
     currentTour,
@@ -71,6 +86,8 @@ export const useToursStore = defineStore('tours', () => {
     fetchTours,
     getTourById,
     fetchSlots,
-    resetSlots
+    resetSlots,
+    fixedInstances,
+    fetchFixedInstances
   }
 })
