@@ -118,7 +118,7 @@
                         </div>
 
                             <div class="relative flex items-center mt-2 mb-3">
-                                <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados ¿Son menos personas que el mínimo requerido?</span>
+                                <span class="text-[11px] uppercase tracking-widest text-muted-foreground">Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados ¿Son menos personas que el mínimo requerido?</span>
                             </div>
                             <!-- Helper: Join Existing -->
                             <div v-if="joinableInstances && joinableInstances.length > 0" class="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -162,7 +162,26 @@
                                         </div>
                                     </button>
                                 </div>
+                                <div class="relative flex items-center">
+                                    <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Si tu grupo sí cumple el mínimo, continúa nomrmalmente con la reserva</span>
+                                </div>
                             </div>
+
+                            <!-- No joinable instances - suggest upcoming tours -->
+                            <div v-else-if="!currentTour.fixedSchedule" class="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                                <div class="border border-border/50 p-6 text-center bg-muted/20">
+                                    <router-link 
+                                        to="/tours/upcoming"
+                                        class="inline-flex items-center justify-center px-6 py-3 text-xs uppercase tracking-[0.2em] font-bold border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                                    >
+                                        Ver Tours Programados &rarr;
+                                    </router-link>
+                                </div>
+                                <div class="relative flex items-center">
+                                    <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Si tu grupo sí cumple el mínimo, continúa nomrmalmente con la reserva</span>
+                                </div>
+                            </div>
+                            
                     </div>
                 </section>
 
