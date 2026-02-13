@@ -4,7 +4,7 @@ import { adminApi } from '@/services/api'
 
 export const useAdminStore = defineStore('admin', () => {
   const isAuthenticated = ref(false)
-  const adminPassword = 'admin123' // Simple hardcoded password
+  const adminPassword = 'ENOTURI' // Simple hardcoded password
   
   const orders = ref<any[]>([])
   const payments = ref<any[]>([])

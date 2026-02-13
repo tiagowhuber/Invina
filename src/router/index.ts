@@ -74,12 +74,13 @@ const router = createRouter({
     },
     {
       path: '/admin',
+      redirect: '/admin/login',
       component: AdminLayout,
       meta: { requiresAuth: true },
       children: [
         {
           path: '',
-          redirect: 'orders'
+          redirect: '/admin/orders'
         },
         {
           path: 'orders',

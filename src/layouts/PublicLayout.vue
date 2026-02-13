@@ -30,7 +30,7 @@
 
           <!-- Logo -->
           <router-link to="/" class="text-3xl md:text-4xl font-normal tracking-tight text-primary hover:opacity-80 transition-opacity font-serif mx-8">
-            INVINA
+            <img src="/invina_negro.png" alt="INVINA Logo" class="h-10 md:h-12" />
           </router-link>
           
           <!-- Right Nav -->
