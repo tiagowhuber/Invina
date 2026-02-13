@@ -118,7 +118,7 @@
                         </div>
 
                             <div class="relative flex items-center mt-2 mb-3">
-                                <span class="text-[11px] uppercase tracking-widest text-muted-foreground">Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados ¿Son menos personas que el mínimo requerido?</span>
+                                <span class="text-[11px] uppercase tracking-widest text-muted-foreground">-Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados <br> ¿Son menos personas que el mínimo requerido?</span>
                             </div>
                             <!-- Helper: Join Existing -->
                             <div v-if="joinableInstances && joinableInstances.length > 0" class="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -163,7 +163,7 @@
                                     </button>
                                 </div>
                                 <div class="relative flex items-center">
-                                    <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Si tu grupo sí cumple el mínimo, continúa nomrmalmente con la reserva</span>
+                                    <span class="text-[10px] uppercase tracking-widest text-muted-foreground">-Si tu grupo sí cumple el mínimo, continúa nomrmalmente con la reserva</span>
                                 </div>
                             </div>
 
