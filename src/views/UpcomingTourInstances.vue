@@ -1,5 +1,5 @@
 <template>
-  <div class="upcoming-tours min-h-screen bg-background text-foreground py-24">
+  <div class="upcoming-tours min-h-screen bg-background text-foreground py-4">
     <div class="container mx-auto px-6 max-w-6xl">
       <header class="mb-16 text-center">
         <span class="text-xs uppercase tracking-[0.2em] text-primary mb-4 block">Calendario</span>
