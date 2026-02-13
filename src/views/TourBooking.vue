@@ -377,10 +377,11 @@ const pricePerPerson = computed(() => {
 
 // Validation
 const isFormValid = computed(() => {
+  const minAttendants = currentTour.value?.minAttendants || 1
   const basicValid = (
     form.value.date &&
     form.value.time &&
-    form.value.attendeesCount > 0 &&
+    form.value.attendeesCount >= minAttendants &&
     form.value.customerName.length > 2 &&
     form.value.customerRut.length > 6 &&
     form.value.customerEmail.includes('@')
@@ -507,10 +508,11 @@ async function handleSubmit() {
   
   if (!isFormValid.value) {
       // Granular validation messages
+      const minAttendants = currentTour.value?.minAttendants || 1
       if (!form.value.date) validationError.value = 'Por favor, selecciona una fecha para tu visita.'
       else if (!form.value.time) validationError.value = 'Debes seleccionar un horario disponible.'
       else if (hasMenus.value && !form.value.menuId) validationError.value = 'Esta experiencia requiere seleccionar un menú.'
-      else if (form.value.attendeesCount < 1) validationError.value = 'El número de invitados debe ser al menos 1.'
+      else if (form.value.attendeesCount < minAttendants) validationError.value = `El número de invitados debe ser al menos ${minAttendants}.`
       else if (!form.value.customerName || form.value.customerName.length <= 2) validationError.value = 'Por favor ingresa tu nombre completo.'
       else if (!form.value.customerRut || form.value.customerRut.length <= 6) validationError.value = 'Ingresa un RUT válido para la facturación.'
       else if (!form.value.customerEmail || !form.value.customerEmail.includes('@')) validationError.value = 'Necesitamos un email válido para enviarte la confirmación.'
