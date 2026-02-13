@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="instance in adminStore.instances" :key="instance.id" class="hover:bg-gray-50">
+          <tr v-for="instance in sortedInstances" :key="instance.id" class="hover:bg-gray-50">
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
               #{{ instance.id }}
             </td>
@@ -58,10 +58,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useAdminStore } from '@/stores/admin'
 
 const adminStore = useAdminStore()
+
+const sortedInstances = computed(() => {
+  return [...adminStore.instances].sort((a, b) => {
+    const dateA = new Date(a.instanceDate)
+    const dateB = new Date(b.instanceDate)
+    return dateA.getTime() - dateB.getTime()
+  })
+})
 
 function loadData() {
   adminStore.fetchInstances()
