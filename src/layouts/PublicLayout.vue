@@ -112,7 +112,7 @@ const closeMenu = () => {
 
           <div class="h-px w-12 bg-border my-4"></div>
 
-          <a href="https://www.instagram.com/invina_cl/" target="_blank" class="uppercase tracking-widest text-xs text-muted-foreground hover:text-primary transition-colors">
+          <a href="https://www.instagram.com/invina_cl/" target="_blank" class="uppercase tracking-widest text-xs text-muted-foreground hover:text-primary transition-colors bg-white rounded-2xl px-1 py-0 border border-black bg-opacity-90" @click="closeMenu">
             Instagram
           </a>
         </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="tour-booking min-h-screen bg-background text-foreground py-12 md:py-10">
+  <div class="tour-booking min-h-screen bg-background text-foreground py-2 md:py-10">
     <div class="container mx-auto px-6 max-w-6xl">
         <!-- Back Link -->
         <router-link 
@@ -116,8 +116,8 @@
                                 </div>
                             </div>
                         </div>
-
-                            <div class="relative flex items-center mt-2 mb-3">
+                            <!-- Only show joinable groups section if tour has minimum > 1 -->
+                            <div v-if="currentTour.minAttendants > 1">                            <div class="relative flex items-center mt-2 mb-3">
                                 <span class="text-[11px] uppercase tracking-widest text-muted-foreground">-Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados <br> ¿Son menos personas que el mínimo requerido?</span>
                             </div>
                             <!-- Helper: Join Existing -->
@@ -180,6 +180,7 @@
                                 <div class="relative flex items-center">
                                     <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Si tu grupo sí cumple el mínimo, continúa nomrmalmente con la reserva</span>
                                 </div>
+                            </div>
                             </div>
                             
                     </div>
