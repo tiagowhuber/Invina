@@ -67,9 +67,11 @@
                         </div>
 
                         <!-- Flexible Date Picker View -->
-                        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <!-- Date -->
-                            <div class="space-y-4">
+                        <div v-else class="space-y-10">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Date -->
+                                <div class="space-y-4">
                                 <label class="text-xs uppercase tracking-widest text-muted-foreground">
                                     Fecha <span v-if="currentTour?.tourType === 'Standard'" class="text-[10px] normal-case tracking-normal">(Lun-Sáb)</span>
                                 </label>
@@ -114,7 +116,55 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
+
+                            <div class="relative flex items-center mt-2 mb-3">
+                                <span class="text-[10px] uppercase tracking-widest text-muted-foreground">Este tour requiere un mínimo de {{ currentTour.minAttendants || 1 }} invitados ¿Son menos personas que el mínimo requerido?</span>
+                            </div>
+                            <!-- Helper: Join Existing -->
+                            <div v-if="joinableInstances && joinableInstances.length > 0" class="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                                <div class="flex justify-between items-end border-b border-primary/20 pb-2">
+                                    <label class="text-xs uppercase tracking-widest text-primary font-bold">Unirse a grupo existente</label>
+                                    <span class="text-[10px] text-muted-foreground uppercase tracking-wider">Sin mínimo de cupos</span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <button
+                                        v-for="instance in joinableInstances"
+                                        :key="instance.id"
+                                        type="button"
+                                        @click="selectJoinableInstance(instance)"
+                                        :class="[
+                                            'flex flex-col p-4 border transition-all text-left relative overflow-hidden group',
+                                            (form.date === instance.instanceDate && form.time === instance.startTime)
+                                            ? 'bg-primary border-primary text-primary-foreground ring-1 ring-black ring-offset-1' 
+                                            : 'border-border hover:border-primary/50 text-foreground hover:bg-black/5'
+                                        ]"
+                                    >
+                                        <div class="flex justify-between items-center w-full mb-2">
+                                            <span class="font-serif text-lg">{{ formatDateStr(instance.instanceDate) }}</span>
+                                            <span class="text-xs font-bold border border-current px-2 py-0.5 rounded-full opacity-70">
+                                                {{ instance.startTime.substring(0, 5) }}
+                                            </span>
+                                        </div>
+                                        <div class="flex justify-between items-end w-full mt-auto">
+                                            <div class="flex -space-x-2">
+                                                 <!-- Fake avatars visual -->
+                                                 <div v-for="n in Math.min(3, instance.currentAttendants)" :key="n" class="w-6 h-6 rounded-full bg-muted-foreground/30 border-2 border-background flex items-center justify-center text-[8px] font-bold text-white">
+                                                    
+                                                 </div>
+                                                 <div v-if="instance.currentAttendants > 3" class="w-6 h-6 rounded-full bg-muted-foreground/30 border-2 border-background flex items-center justify-center text-[8px] font-bold text-white uppercase ml-1">
+                                                     +{{ instance.currentAttendants - 3 }}
+                                                 </div>
+                                            </div>
+                                            <span class="text-[10px] uppercase tracking-wider opacity-70">
+                                                {{ currentTour.maxAttendants - instance.currentAttendants }} cupos disp.
+                                            </span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                </section>
 
                     <!-- Step 2: Additionals (Optional) -->
                     <section ref="additionalsSection" v-if="availableAdditionals.length > 0" class="space-y-8">
@@ -143,9 +193,9 @@
                     <section ref="detailsSection" class="space-y-8">
                          <h3 class="text-xl font-serif border-b border-border pb-4">03. Datos de Cliente</h3>
                          
-                         <!-- Attendees -->
+                        <!-- Attendees -->
                         <div class="space-y-4">
-                            <label class="text-xs uppercase tracking-widest text-muted-foreground">Número de Invitados (Mín: {{ currentTour.minAttendants || 1 }})</label>
+                            <label class="text-xs uppercase tracking-widest text-muted-foreground">Número de Invitados</label>
                             <input
                                 v-model.number="form.attendeesCount"
                                 type="number"
@@ -329,7 +379,7 @@ import { ordersApi } from '@/services/api'
 
 const route = useRoute()
 const toursStore = useToursStore()
-const { currentTour, currentSlots, fixedInstances, loading } = storeToRefs(toursStore)
+const { currentTour, currentSlots, fixedInstances, joinableInstances, loading } = storeToRefs(toursStore)
 
 const tourId = parseInt(route.params.id as string)
 
@@ -337,6 +387,7 @@ const submitting = ref(false)
 const localError = ref<string | null>(null)
 const validationError = ref<string | null>(null)
 const isMenuExpanded = ref(false)
+const isJoiningGroup = ref(false)
 const additionalsSection = ref<HTMLElement | null>(null)
 const detailsSection = ref<HTMLElement | null>(null)
 
@@ -377,7 +428,10 @@ const pricePerPerson = computed(() => {
 
 // Validation
 const isFormValid = computed(() => {
-  const minAttendants = currentTour.value?.minAttendants || 1
+  const minAttendants = (isJoiningGroup.value && joinableInstances.value.length > 0) 
+      ? 1 
+      : (currentTour.value?.minAttendants || 1)
+
   const basicValid = (
     form.value.date &&
     form.value.time &&
@@ -441,48 +495,67 @@ const minDate = computed(() => {
   return now.toISOString().split('T')[0]
 })
 
-function selectInstance(instance: any) {
+function selectJoinableInstance(instance: any) {
     form.value.date = instance.instanceDate
     form.value.time = instance.startTime
-    validationError.value = null // Clear any previous errors
-    // Visual feedback handled by class binding
+    isJoiningGroup.value = true
+    validationError.value = null
     
-    // Auto-scroll to additionals if available, otherwise to details section
     setTimeout(() => {
         const targetSection = availableAdditionals.value.length > 0 ? additionalsSection.value : detailsSection.value
         if (targetSection) {
             const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset
-            const offsetPosition = elementPosition - 100 // Offset for navbar
-            
+            const offsetPosition = elementPosition - 100
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             })
+        }
+    }, 100)
+}
+
+function selectInstance(instance: any) {
+    form.value.date = instance.instanceDate
+    form.value.time = instance.startTime
+    
+    // For fixed schedule, if it has attendees, we can consider it joining 
+    // (though backend handles this logic, frontend validation needs to know)
+    if (instance.currentAttendants > 0) {
+        isJoiningGroup.value = true
+    } else {
+        isJoiningGroup.value = false
+    }
+
+    validationError.value = null 
+    
+    setTimeout(() => {
+        const targetSection = availableAdditionals.value.length > 0 ? additionalsSection.value : detailsSection.value
+        if (targetSection) {
+            const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset
+            const offsetPosition = elementPosition - 100 
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
         }
     }, 100)
 }
 
 function selectTimeSlot(timeStr: string) {
     form.value.time = timeStr
-    validationError.value = null // Clear any previous errors
+    isJoiningGroup.value = false
+    validationError.value = null 
     
-    // Auto-scroll to additionals if available, otherwise to details section
     setTimeout(() => {
         const targetSection = availableAdditionals.value.length > 0 ? additionalsSection.value : detailsSection.value
         if (targetSection) {
             const elementPosition = targetSection.getBoundingClientRect().top + window.pageYOffset
-            const offsetPosition = elementPosition - 100 // Offset for navbar
-            
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            })
+            const offsetPosition = elementPosition - 100
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
         }
     }, 100)
 }
 
 // Actions
 async function handleDateChange() {
+  isJoiningGroup.value = false
   validationError.value = null
   
   if (form.value.date && tourId) {
@@ -508,7 +581,7 @@ async function handleSubmit() {
   
   if (!isFormValid.value) {
       // Granular validation messages
-      const minAttendants = currentTour.value?.minAttendants || 1
+      const minAttendants = (isJoiningGroup.value && joinableInstances.value.length > 0) ? 1 : (currentTour.value?.minAttendants || 1)
       if (!form.value.date) validationError.value = 'Por favor, selecciona una fecha para tu visita.'
       else if (!form.value.time) validationError.value = 'Debes seleccionar un horario disponible.'
       else if (hasMenus.value && !form.value.menuId) validationError.value = 'Esta experiencia requiere seleccionar un menú.'
@@ -580,6 +653,8 @@ onMounted(async () => {
      
      if (tour.fixedSchedule) {
          await toursStore.fetchFixedInstances(tour.id)
+     } else {
+         await toursStore.fetchJoinableInstances(tour.id)
      }
    }
 
@@ -591,6 +666,36 @@ onMounted(async () => {
       if (tour?.menus?.some(m => m.id === menuIdNum)) {
           form.value.menuId = menuIdNum
       }
+   }
+
+   // NEW: Handle pre-selected date/time (e.g. from Upcoming view)
+   const preDate = route.query.preDate as string
+   const preTime = route.query.preTime as string
+   if (preDate && preTime) {
+       // We need to wait for joinableInstances to load if we want to toggle "isJoiningGroup" correctly?
+       // Or just set the form.
+       form.value.date = preDate;
+       // We must trigger slots fetch or manually set logic
+       // But if it's joinable, we want to flag it.
+       // Let's assume fetchJoinableInstances was called above.
+       
+       // Just set basic form, the user can verify.
+       // Better: Try to find it in joinableInstances
+       // Wait a tick for fetch to complete if async? No, fetch is awaited.
+       
+        // Check if this date/time exists in joinable
+        const match = joinableInstances.value.find((i:any) => i.instanceDate === preDate && i.startTime === preTime);
+        if (match) {
+            selectJoinableInstance(match);
+        } else if (tour?.fixedSchedule) {
+             const fixedMatch = fixedInstances.value.find((i:any) => i.instanceDate === preDate && i.startTime === preTime);
+             if (fixedMatch) selectInstance(fixedMatch);
+        } else {
+            // Fallback: just set them, handleDateChange will fetch slots
+             form.value.time = preTime; // Set time first so it sticks? No, slots overwrite.
+             await handleDateChange();
+             form.value.time = preTime; // Re-set time after slots load
+        }
    }
 })
 </script>

@@ -23,11 +23,20 @@ export const toursApi = {
     return data
   },
 
-  getInstances: async (tourId: number) => {
-    const { data } = await apiClient.get<any[]>('/tours/' + tourId + '/instances') // Need proper typing for instance
+  getInstances: async (tourId: number, type?: 'joinable') => {
+    const params: any = {};
+    if (type) params.type = type;
+    
+    const { data } = await apiClient.get<any[]>('/tours/' + tourId + '/instances', { params }) // Need proper typing for instance
+    return data
+  },
+
+  getAllUpcoming: async () => {
+    const { data } = await apiClient.get<any[]>('/tours/upcoming')
     return data
   }
 }
+
 
 export const ordersApi = {
   create: async (payload: CreateOrderRequest) => {

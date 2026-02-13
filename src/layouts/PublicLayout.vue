@@ -14,6 +14,12 @@
             >
               Enoturismo
             </router-link>
+            <router-link 
+              to="/tours/upcoming" 
+              class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
+            >
+              Tours programados
+            </router-link>
             <!-- <router-link 
               to="/private" 
               class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"

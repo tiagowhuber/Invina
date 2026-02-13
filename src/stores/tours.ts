@@ -8,6 +8,7 @@ export const useToursStore = defineStore('tours', () => {
   const currentTour = ref<Tour | null>(null)
   const currentSlots = ref<string[]>([]) // Changed from AvailabilityResponse
   const fixedInstances = ref<any[]>([])
+  const joinableInstances = ref<any[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -75,6 +76,22 @@ export const useToursStore = defineStore('tours', () => {
       }
   }
 
+  async function fetchJoinableInstances(tourId: number) {
+      loading.value = true
+      error.value = null
+      try {
+          // Pass 'joinable' to filter for active groups with space
+          const instances = await toursApi.getInstances(tourId, 'joinable')
+          joinableInstances.value = instances
+      } catch (err: any) {
+          console.error('Error fetching joinable instances:', err)
+          // Fail silently or just empty list provided joinable logic is optional enhancement
+          joinableInstances.value = []
+      } finally {
+          loading.value = false
+      }
+  }
+
   return {
     tours,
     currentTour,
@@ -88,6 +105,8 @@ export const useToursStore = defineStore('tours', () => {
     fetchSlots,
     resetSlots,
     fixedInstances,
-    fetchFixedInstances
+    fetchFixedInstances,
+    joinableInstances,
+    fetchJoinableInstances
   }
 })

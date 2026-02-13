@@ -26,6 +26,11 @@ const router = createRouter({
           component: () => import('@/views/ToursList.vue'),
         },
         {
+          path: '/tours/upcoming',
+          name: 'upcoming-tours',
+          component: () => import('@/views/UpcomingTourInstances.vue'),
+        },
+        {
           path: '/tours/:id',
           name: 'tour-detail',
           component: () => import('@/views/TourDetail.vue'),
