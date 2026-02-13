@@ -42,11 +42,11 @@ export const useToursStore = defineStore('tours', () => {
     return found
   }
 
-  async function fetchSlots(tourId: number, date: string) {
+  async function fetchSlots(tourId: number, date: string, partySize: number = 1) {
     loading.value = true
     error.value = null
     try {
-      const slots = await toursApi.getSlots(tourId, date)
+      const slots = await toursApi.getSlots(tourId, date, partySize)
       currentSlots.value = slots
     } catch (err: any) {
       error.value = err.response?.data?.error || 'Error al cargar los horarios disponibles'

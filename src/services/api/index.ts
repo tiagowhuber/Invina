@@ -16,9 +16,9 @@ export const toursApi = {
     return data
   },
 
-  getSlots: async (tourId: number, date: string) => {
+  getSlots: async (tourId: number, date: string, partySize: number = 1) => {
     const { data } = await apiClient.get<string[]>('/tours/slots', {
-      params: { tourId, date }
+      params: { tourId, date, partySize }
     })
     return data
   },

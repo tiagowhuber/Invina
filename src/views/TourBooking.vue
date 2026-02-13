@@ -443,6 +443,7 @@ const minDate = computed(() => {
 function selectInstance(instance: any) {
     form.value.date = instance.instanceDate
     form.value.time = instance.startTime
+    validationError.value = null // Clear any previous errors
     // Visual feedback handled by class binding
     
     // Auto-scroll to additionals if available, otherwise to details section
@@ -462,6 +463,7 @@ function selectInstance(instance: any) {
 
 function selectTimeSlot(timeStr: string) {
     form.value.time = timeStr
+    validationError.value = null // Clear any previous errors
     
     // Auto-scroll to additionals if available, otherwise to details section
     setTimeout(() => {
@@ -496,7 +498,7 @@ async function handleDateChange() {
     }
 
     form.value.time = ''
-    await toursStore.fetchSlots(tourId, form.value.date)
+    await toursStore.fetchSlots(tourId, form.value.date, form.value.attendeesCount)
   }
 }
 
