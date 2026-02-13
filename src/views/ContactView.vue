@@ -2,7 +2,7 @@
   <div class="contact-view min-h-[60vh] flex flex-col justify-center">
     <div class="container mx-auto max-w-4xl">
       <!-- Header Section -->
-      <div class="mb-12 md:mb-16 text-center border-b border-primary/10 pb-10">
+      <div class="mt-10 mb-12 md:mb-16 text-center border-b border-primary/10 pb-10">
         <span class="text-xs font-bold tracking-[0.3em] text-primary/60 uppercase mb-4 block animate-fade-in-up">
           Comunícate con nosotros
         </span>
