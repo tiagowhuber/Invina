@@ -44,3 +44,18 @@ export const ordersApi = {
     return data
   }
 }
+
+export const adminApi = {
+  getAllOrders: async () => {
+    const { data } = await apiClient.get<any[]>('/orders/admin/all')
+    return data
+  },
+  getAllPayments: async () => {
+    const { data } = await apiClient.get<any[]>('/payments/admin/all')
+    return data
+  },
+  getAllInstances: async () => {
+    const { data } = await apiClient.get<any[]>('/tours/admin/instances')
+    return data
+  },
+}

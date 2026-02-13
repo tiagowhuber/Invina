@@ -36,6 +36,12 @@
           <!-- Right Nav -->
           <div class="flex gap-8 items-center flex-1 justify-end">
             <router-link 
+              to="/contact" 
+              class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
+            >
+              Contacto
+            </router-link>
+            <router-link 
               to="/orders/lookup" 
               class="uppercase tracking-widest text-xs font-medium hover:text-primary transition-colors"
             >
@@ -66,7 +72,7 @@
           </div>
           <div class="flex gap-8 text-xs uppercase tracking-widest text-muted-foreground">
             <a href="https://www.instagram.com/invina_cl/" class="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="#" class="hover:text-primary transition-colors">Contacto: +59757083058</a>
+            <router-link to="/contact" class="hover:text-primary transition-colors">Contacto</router-link>
           </div>
         </div>
         <div class="text-center mt-12 text-[10px] text-muted-foreground uppercase tracking-wider">

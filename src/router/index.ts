@@ -31,6 +31,11 @@ const router = createRouter({
           component: () => import('@/views/UpcomingTourInstances.vue'),
         },
         {
+          path: '/contact',
+          name: 'contact',
+          component: () => import('@/views/ContactView.vue'),
+        },
+        {
           path: '/tours/:id',
           name: 'tour-detail',
           component: () => import('@/views/TourDetail.vue'),
@@ -74,23 +79,22 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'admin-tours',
-          component: () => import('@/views/admin/TourManagement.vue'),
+          redirect: 'orders'
         },
         {
-          path: 'bookings',
-          name: 'admin-bookings',
-          component: () => import('@/views/admin/BookingsDashboard.vue'),
+          path: 'orders',
+          name: 'admin-orders',
+          component: () => import('@/views/admin/OrdersView.vue'),
         },
         {
-          path: 'validate',
-          name: 'admin-validate',
-          component: () => import('@/views/admin/TicketValidation.vue'),
+          path: 'payments',
+          name: 'admin-payments',
+          component: () => import('@/views/admin/PaymentsView.vue'),
         },
         {
-          path: 'statistics',
-          name: 'admin-statistics',
-          component: () => import('@/views/admin/Statistics.vue'),
+          path: 'instances',
+          name: 'admin-instances',
+          component: () => import('@/views/admin/TourInstancesView.vue'),
         },
       ],
     },
